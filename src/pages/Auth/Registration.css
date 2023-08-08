@@ -1,0 +1,81 @@
+.App {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 100vh;
+}
+.RegistrationForm {
+  width: 100%;
+  padding: 10px;
+  /* background: red; */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 70%;
+}
+.form {
+  height: 100%;
+  width: 70%;
+  /* background-color: #f0f0f0; */
+  padding: 20px;
+  border-radius: 4px;
+  display: flex;
+  justify-content: center;
+  flex-direction: column;
+  align-items: center;
+}
+
+h2 {
+  text-align: center;
+  font-size: 30px;
+}
+
+.form-group {
+  width: 330px;
+  padding: 7px;
+}
+
+.form-group-1 {
+  display: flex;
+  justify-content: center;
+  width: 100%;
+}
+label {
+  display: block;
+  margin-bottom: 5px;
+}
+
+input[type="email"],
+input[type="text"],
+input[type="password"],
+textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #ccc;
+  border-radius: 30px;
+}
+
+.error {
+  color: red;
+  font-size: 14px;
+  margin-top: 5px;
+}
+
+.submit {
+  width: 20%;
+  padding: 10px;
+  padding-left: 1px;
+  background-color: rgb(249, 8, 36);
+  color: white;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: background-color 0.3s ease;
+}
+
+button[type="submit"]:hover {
+  background-color: #1ca123;
+}
+.imageinfint {
+  padding-left: 30px;
+}
