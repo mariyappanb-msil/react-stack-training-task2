@@ -1,0 +1,46 @@
+.heading {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stock-card {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+   
+}
+
+.stock-info img{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 7%;
+    width: 10%;
+    height: 5%;
+}
+
+.stock-info {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.stock-options {
+   display: flex;
+   justify-content: center;
+   align-items: center;
+}
+
+.stock-options button {
+    margin: 10px;
+    display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  text-align: center;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  transition: background-color 0.3s, color 0.3s;
+}
