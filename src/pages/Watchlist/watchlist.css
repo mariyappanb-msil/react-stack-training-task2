@@ -2,45 +2,66 @@
     display: flex;
     justify-content: center;
     align-items: center;
-}
-
-.stock-card {
+  }
+  
+  .stock-card {
     display: flex;
-    justify-content: center;
+    width: 420px;
+    margin: 0 auto;
+    justify-content: space-between;
     align-items: center;
-   
-}
-
-.stock-info img{
+    border: 1px solid #ccc;
+    padding: 10px;
+    margin-bottom: 10px;
+    border-radius: 5px;
+  }
+  
+  .stock-card-img {
+    width: 23%;
+    margin-right: 10px;
+  }
+  
+  .stock-card-details {
     display: flex;
-    justify-content: center;
-    align-items: center;
-    margin: 7%;
-    width: 10%;
-    height: 5%;
-}
-
-.stock-info {
+    flex-direction: column;
+  }
+  
+  .stock-card-details h3 {
+    margin: 0;
+  }
+  
+  .stock-card-details > div {
+    margin: 5px 0;
+  }
+  
+  .stock-card-options {
     display: flex;
-    justify-content: center;
     align-items: center;
-}
-
-.stock-options {
-   display: flex;
-   justify-content: center;
-   align-items: center;
-}
-
-.stock-options button {
-    margin: 10px;
-    display: inline-block;
-  padding: 10px 20px;
-  font-size: 16px;
-  font-weight: bold;
-  text-align: center;
-  border: none;
-  border-radius: 5px;
-  cursor: pointer;
-  transition: background-color 0.3s, color 0.3s;
-}
+  }
+  
+  .stock-card-options button {
+    margin: 0 5px;
+    padding: 10px 20px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  .buybtn {
+    background-color: #2ecc71;
+    color: #ffffff;
+  }
+  
+  .sellbtn {
+    background-color: #e74c3c;
+    color: #ffffff;
+  }
+  
+  .stock-card-options button:hover {
+    background-color: #6ac1fc;
+  }
+  

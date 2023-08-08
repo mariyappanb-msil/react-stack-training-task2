@@ -1,13 +1,14 @@
-import logo from './logo.svg';
-import './App.css';
-import Watchlist from './pages/Watchlist/Watchlist';
+import "./App.css";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
+import Watchlist from "./pages/Watchlist/Watchlist";
 
 function App() {
   return (
-    <div className="">
-      <Watchlist />
-     
-    </div>
+    <Router>
+      <Routes>
+        <Route path="/" element={<Watchlist />} />
+      </Routes>
+    </Router>
   );
 }
 
