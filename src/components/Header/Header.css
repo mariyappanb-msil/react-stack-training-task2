@@ -1,0 +1,18 @@
+.nav {
+    display: flex;
+   
+    padding: 10px;
+    background-color: #333;
+    color: white;
+  }
+  
+  .nav p {
+    margin: 0;
+    padding: 0 15px;
+    cursor: pointer;
+  }
+  
+  .nav p:hover {
+    text-decoration: underline;
+  }
+  

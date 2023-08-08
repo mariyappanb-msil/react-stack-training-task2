@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import "./Login.css";
+import { useNavigate } from "react-router-dom";
+
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = (e) => {
     e.preventDefault();
@@ -12,15 +15,14 @@ const Login = () => {
 
     const user = storedData.find((data) => {
       if (data.username === name && data.password === password) {
-        alert("Welcome", storedData.username);
+        alert("Welcome"+ " "+name);
+        navigate('/watchlist');
+        
+      }
+      else{
+        alert("enter valid details to login")
       }
     });
-
-    if (!user) {
-      alert("Data Doesnot exists. Please Register");
-
-      return;
-    }
   };
 
   return (
@@ -49,8 +51,10 @@ const Login = () => {
           />
         </div>
         <button type="submit">Login</button>
+        <a className="accountmessage">Don't have an account?</a>  <p  className="regester-button" onClick={() => navigate("/regestration")}>Regester</p>
       </form>
-      <a>Don't have an account?</a>
+       
+
     </div>
   );
 };
