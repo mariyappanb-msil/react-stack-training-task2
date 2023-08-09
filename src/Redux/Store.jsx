@@ -1,12 +1,9 @@
 import { configureStore } from "@reduxjs/toolkit";
-import orderReducer from './Slice'
-
-
-
+import orderReducer from "./Slice";
 
 export const store = configureStore({
   reducer: {
-    Order: orderReducer, 
+    Order: orderReducer,
   },
 });
 export default store;
