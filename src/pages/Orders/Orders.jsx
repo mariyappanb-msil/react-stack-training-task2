@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./orders.css"; // Import the generated stylesheet
+import Header from "../../components/Header/Header";
 
 const Orders = () => {
   const items = useSelector((state) => state.Order);
@@ -17,6 +18,7 @@ const Orders = () => {
 
   return (
     <div className="orders-container">
+      <Header/>
       <h1>Orders</h1>
       <div className="orders-center">
         {orders.map((stock, index) => (
