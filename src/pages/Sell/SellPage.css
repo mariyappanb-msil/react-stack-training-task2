@@ -1,0 +1,100 @@
+.sell-heading {
+    font-size: 24px;
+    font-weight: bold;
+    margin-bottom: 20px;
+  }
+  
+  .sell-stock-card {
+    margin: 0 auto;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    width: 320px;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 15px;
+    box-shadow: 0px 2px 4px rgba(0, 0, 0, 0.1);
+  }
+  
+  .sell-stock-card-details {
+    display: flex;
+    justify-content: space-between;
+   
+    align-items: center;
+  }
+  
+  .sell-stock-name {
+    font-size: 20px;
+    font-weight: bold;
+    color: #333;
+    margin: 0;
+  }
+  
+  .sell-stock-price {
+    color: #007bff;
+    font-weight: bold;
+  }
+  
+  .sell-stock-quantity {
+    color: #555;
+  }
+  
+  .sell-buy-button-container {
+    text-align: right;
+  }
+  
+  .sell-buynowbtn {
+    background-color: #007bff;
+    width: 72%;
+    color: white;
+    padding: 8px 16px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.2s ease-in-out;
+  }
+  
+  .sell-buynowbtn:hover {
+    background-color: #0056b3;
+  }
+
+
+.quantity-button {
+    background-color: #f8f9fa;
+  
+    color: #333;
+    font-size: 18px;
+    font-weight: bold;
+    width: 30px;
+    height: 30px;
+    margin: 0 5px;
+    cursor: pointer;
+    transition: background-color 0.2s, border-color 0.2s, color 0.2s;
+  }
+  
+  .quantity-button:hover {
+    background-color: #e9ecef;
+    border-color: #adb5bd;
+    color: #333;
+  }
+ .total-amount {
+    margin-top: 45px;
+    color: black;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+
+ }
+
+ .order-msg {
+    display: flex;
+    justify-content: space-between;
+    font-weight: bold;
+
+
+ }
+ .order-stock-card-details {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
