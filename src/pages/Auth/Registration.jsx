@@ -101,7 +101,7 @@ const Registration = () => {
 
   const validatePassword = (password) => {
     const passwordPattern =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,}$/;
+      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,25}$/;
     return passwordPattern.test(password);
   };
 

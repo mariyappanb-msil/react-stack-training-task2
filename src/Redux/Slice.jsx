@@ -5,14 +5,14 @@ const Slice = createSlice({
   initialState: [],
   reducers: {
     addItem: (state, action) => {
-      const { name, logo, price } = action.payload;
+      const { name, logo, price,quantity} = action.payload;
 
       const existingItem = state.find(item => item.name === name);
 
       if (existingItem) {
-        existingItem.quantity += 1;
+        existingItem.quantity += quantity;
       } else {
-        state.push({ name, logo, price, quantity: 1 });
+        state.push({ name, logo, price, quantity: quantity });
       }
     },
 

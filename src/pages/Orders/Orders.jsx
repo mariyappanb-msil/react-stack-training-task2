@@ -16,6 +16,7 @@ const Orders = () => {
   }
 
   return (
+    <>
     <div className="orders-container">
       <h1>Orders</h1>
       <div className="orders-center">
@@ -38,6 +39,10 @@ const Orders = () => {
       </div>
       <div className="total-amount">Total Amount: {totalAmount}</div>
     </div>
+    <div>
+      Sold
+    </div>
+    </>
   );
 };
 
