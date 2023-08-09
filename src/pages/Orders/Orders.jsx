@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { useSelector } from "react-redux";
 import "./orders.css"; // Import the generated stylesheet
+import Header from "../../components/Header/Header";
 
 const Orders = () => {
   const items = useSelector((state) => state.Order);
@@ -18,6 +19,7 @@ const Orders = () => {
   return (
     <>
     <div className="orders-container">
+      <Header/>
       <h1>Orders</h1>
       <div className="orders-center">
         {orders.map((stock, index) => (
@@ -37,7 +39,7 @@ const Orders = () => {
         </div>
         ))}
       </div>
-      <div className="total-amount">Total Amount: {totalAmount}</div>
+      <div className="total-amount">Total Amount Spent: {totalAmount}</div>
     </div>
     <div>
       Sold

@@ -7,7 +7,7 @@ function Header()
   const navigate = useNavigate();
 
   const handleLogout = () =>{
-    alert("Are u sure to Logout");
+    alert("Do you want to Logout");
     navigate('/')
   }
     return(

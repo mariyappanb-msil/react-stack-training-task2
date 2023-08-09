@@ -15,25 +15,11 @@ function Watchlist() {
 
   const updateStockQuantity = (stockIndex) => {
     const updatedStocks = [...stocks];
-    const stockWatchListData = updatedStocks[stockIndex];
-    const inputQuantity = prompt(`Enter quantity to sell for ${stockWatchListData.name}:`);
-    
-    if (inputQuantity !== null  && inputQuantity > 0) {
-      const quantityToSell = parseInt(inputQuantity, 10);
-      console.log("quantityToSell",quantityToSell)
-      
-      if (quantityToSell <= stockWatchListData.quantity) {
-        updatedStocks[stockIndex].quantity -= quantityToSell;
-        setStocks(updatedStocks);
-        dispatch(addItem({ ...stockWatchListData, quantity: quantityToSell }));
-        navigate("/orders");
-      } else {
-        alert("Insufficient quantity to sell.");
-      }
-    } else {
-      alert("Invalid quantity. Please enter a valid number.");
-    }
-  }
+    console.log(updatedStocks);
+    updatedStocks[stockIndex].quantity -= 1;
+    setStocks(updatedStocks);
+    navigate("/orders");
+  };
 
   const checkStock = (stockIndex) => {
     const updatedStocks = [...stocks];
@@ -51,7 +37,7 @@ function Watchlist() {
   const handleBuy = (e, index) => {
     e.preventDefault();
     updateStockQuantity(index);
-  
+    dispatch(addItem(stocks[index]));
   };
   const handleSell = (e, index) => {
     e.preventDefault();
