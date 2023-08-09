@@ -1,16 +1,20 @@
 import React, { useState } from "react";
-import stocksData from '../../common/stocksData.json'
+import stocksData from "../../common/stocksData.json";
 import "./watchlist.css";
-import { useNavigate } from "react-router-dom";
-import { useDispatch } from "react-redux";
-
-
 import Header from "../../components/Header/Header";
 
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
+  const [buyedstocks,setBuyingstocks] = useState([]);
+  console.log(user,"serh")
+  const handleBuy = (stockName) => {
 
- 
+   
+  };
+
+  const handleSell = (stockName) => {
+   
+  };
 
   return (
     <div>
@@ -23,15 +27,15 @@ function Watchlist() {
           <div className="stock-card-details">
             <h3>{stock.name}</h3>
 
-            <div>Price : {stock.price}</div>
-            <div>Quantity : {stock.quantity}</div>
+            <div>Price: {stock.price}</div>
+            <div>Quantity: {stock.quantity}</div>
           </div>
 
           <div className="stock-card-options">
-            <button className="buybtn" >
+            <button onClick={() => handleBuy(stock.name)} className="buybtn">
               Buy
             </button>
-            <button className="sellbtn">
+            <button onClick={() => handleSell(stock.name)} className="sellbtn">
               Sell
             </button>
           </div>

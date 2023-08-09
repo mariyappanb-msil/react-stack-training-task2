@@ -19,6 +19,7 @@ const Login = () => {
   
     if (user) {
       alert("Welcome" + " " + name);
+      localStorage.setItem(name, JSON.stringify([]));
       navigate('/watchlist');
     } else {
       alert("Enter valid details to login");
