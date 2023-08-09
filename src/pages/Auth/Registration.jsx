@@ -1,7 +1,9 @@
 import React, { useState, useEffect } from "react";
 import "./Registration.css";
+import { useNavigate } from "react-router-dom";
 
 const Registration = () => {
+  const navigate = useNavigate();
   const [data, setData] = useState({
     Email: "",
     username: "",
@@ -84,6 +86,7 @@ const Registration = () => {
     });
 
     console.log(data);
+    navigate('/')
   };
 
   const validateEmail = (email) => {
@@ -183,6 +186,7 @@ const Registration = () => {
 
         <div className="form-group-1">
           <button className="submit">Submit</button>
+          <p className="signin" onClick={() => navigate('/')}>Sign in</p>
         </div>
       </form>
     </div>

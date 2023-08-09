@@ -4,6 +4,7 @@ import "./watchlist.css";
 import { useNavigate } from "react-router-dom"
 import { useDispatch } from "react-redux";
 import { addItem } from "../../Redux/Slice";
+import Header from "../../components/Header/Header";
 
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
@@ -28,6 +29,8 @@ function Watchlist() {
 
   return (
     <div>
+          <Header/>
+
       <h2 className="heading">Stock Watchlist</h2>
       {stocks.map((stock, index) => (
         <div key={index} className="stock-card">
