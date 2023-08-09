@@ -38,7 +38,7 @@ const Orders = () => {
         </div>
         ))}
       </div>
-      <div className="total-amount">Total Amount: {totalAmount}</div>
+      <div className="total-amount">Total Amount Spent: {totalAmount}</div>
     </div>
   );
 };

@@ -18,7 +18,6 @@ function Watchlist() {
     console.log(updatedStocks);
     updatedStocks[stockIndex].quantity -= 1;
     setStocks(updatedStocks);
-    navigate("/orders");
   };
 
   const checkStock = (stockIndex) => {
@@ -38,6 +37,7 @@ function Watchlist() {
     e.preventDefault();
     updateStockQuantity(index);
     dispatch(addItem(stocks[index]));
+    navigate('/buy');
   };
   const handleSell = (e, index) => {
     e.preventDefault();
