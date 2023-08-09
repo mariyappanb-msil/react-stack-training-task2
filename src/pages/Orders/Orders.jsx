@@ -1,51 +1,48 @@
 import React, { useState } from "react";
-import { useSelector } from "react-redux";
-import "./orders.css"; // Import the generated stylesheet
-import Header from "../../components/Header/Header";
+import { useNavigate } from "react-router-dom";
 
-const Orders = () => {
-  const items = useSelector((state) => state.Order);
-  const [orders,setOrders] = useState(items);
+function Orders() {
+  const [orderStocks, setOrderStocks] = useState(
+    JSON.parse(localStorage.getItem("OrderStocks")) || []
+  );
+  const navigate = useNavigate(); // Hook for navigation
 
-  const totalAmount = orders.reduce((total, order) => {
-    return total + order.quantity * order.price;
-  }, 0);
-  const handleSell = (e, index) => {
-    e.preventDefault();
-    
-    
-  }
+  // Calculate the total amount for all ordered stocks
+  const totalAmount = orderStocks.reduce(
+    (total, stock) => total + stock.price * stock.quantity,
+    0
+  );
 
   return (
-    <>
-    <div className="orders-container">
-      <Header/>
-      <h1>Orders</h1>
-      <div className="orders-center">
-        {orders.map((stock, index) => (
-          <div key={index} className="order-card">
-          <img src={stock.logo} alt="logo" className="order-card-img" />
-          <div className="order-card-details">
-            <h3 className="order-card-title">{stock.name}</h3>
-            <div className="order-card-info">Price: {stock.price}</div>
-            <div className="order-card-info">Quantity: {stock.quantity}</div>
-            <div className="order-card-options">
-              <button className="order-buy-btn" onClick={handleSell}>Sell</button>
+    <div>
+      <h2 className="sell-heading">Ordered Stocks</h2>
+      {orderStocks.map((stock, index) => (
+        <div key={index} className="sell-stock-card">
+          <div className="order-stock-card-details">
+            <div>
+              <h3 className="sell-stock-name">{stock.name}</h3>
+              <div className="sell-stock-price">
+                Price: ${stock.price.toFixed(2)}
+              </div>
+              <div className="sell-stock-quantity">
+                Quantity: {stock.quantity}
+              </div>
+              <div className="sell-stock-amount">
+                Amount: ${stock.price.toFixed(2) * stock.quantity.toFixed(2)}
+              </div>
             </div>
-            <div className="order-card-info">
-              Amount: {stock.price * stock.quantity}
+            <div className="sell-buy-button-container">
+              {/* You can add more actions/buttons here if needed */}
             </div>
           </div>
+          <div className="order-msg" >Ordered Done</div>
         </div>
-        ))}
+      ))}
+      <div className="total-amount">
+        Total Amount: ${totalAmount.toFixed(2)}
       </div>
-      <div className="total-amount">Total Amount Spent: {totalAmount}</div>
     </div>
-    <div>
-      Sold
-    </div>
-    </>
   );
-};
+}
 
 export default Orders;
