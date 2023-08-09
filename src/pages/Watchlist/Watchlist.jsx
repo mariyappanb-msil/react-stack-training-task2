@@ -3,60 +3,14 @@ import stocksData from '../../common/stocksData.json'
 import "./watchlist.css";
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useSelector } from "react-redux";
-import { addItem } from "../../Redux/Slice";
+
+
 import Header from "../../components/Header/Header";
 
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
-  const items = useSelector((state) => state.Order);
-  const navigate = useNavigate();
-  const dispatch = useDispatch();
 
-  const updateStockQuantity = (stockIndex) => {
-    const updatedStocks = [...stocks];
-    const stockWatchListData = updatedStocks[stockIndex];
-    const inputQuantity = prompt(`Enter quantity to sell for ${stockWatchListData.name}:`);
-    
-    if (inputQuantity !== null  && inputQuantity > 0) {
-      const quantityToSell = parseInt(inputQuantity, 10);
-      console.log("quantityToSell",quantityToSell)
-      
-      if (quantityToSell <= stockWatchListData.quantity) {
-        updatedStocks[stockIndex].quantity -= quantityToSell;
-        setStocks(updatedStocks);
-        dispatch(addItem({ ...stockWatchListData, quantity: quantityToSell }));
-        navigate("/orders");
-      } else {
-        alert("Insufficient quantity to sell.");
-      }
-    } else {
-      alert("Invalid quantity. Please enter a valid number.");
-    }
-  }
-
-  const checkStock = (stockIndex) => {
-    const updatedStocks = [...stocks];
-    const stockWatchListData = updatedStocks[stockIndex];
-    const stockInOrders = items.find(
-      (item) => item.name === stockWatchListData.name
-    );
-    if (!stockInOrders) {
-      alert("Order is not placed. First Buy STOCKS");
-    } else {
-      navigate("/orders");
-    }
-  };
-
-  const handleBuy = (e, index) => {
-    e.preventDefault();
-    updateStockQuantity(index);
-  
-  };
-  const handleSell = (e, index) => {
-    e.preventDefault();
-    checkStock(index);
-  };
+ 
 
   return (
     <div>
@@ -74,10 +28,10 @@ function Watchlist() {
           </div>
 
           <div className="stock-card-options">
-            <button className="buybtn" onClick={(e) => handleBuy(e, index)}>
+            <button className="buybtn" >
               Buy
             </button>
-            <button className="sellbtn" onClick={(e) => handleSell(e, index)}>
+            <button className="sellbtn">
               Sell
             </button>
           </div>
