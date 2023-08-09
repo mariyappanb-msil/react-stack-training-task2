@@ -1,23 +1,42 @@
 import React, { useState } from "react";
-import { useSelector, useDispatch } from "react-redux";
-
+import { useSelector } from "react-redux";
+import "./orders.css"; // Import the generated stylesheet
 
 const Orders = () => {
   const items = useSelector((state) => state.Order);
-  const [orders, setOrders] = useState(items);
-  console.log("III",items)
+  const [orders,setOrders] = useState(items);
+
+  const totalAmount = orders.reduce((total, order) => {
+    return total + order.quantity * order.price;
+  }, 0);
+  const handleSell = (e, index) => {
+    e.preventDefault();
+    
+    
+  }
+
   return (
-    <div>
-      {orders.map((stock, index) => (
-        <div key={index} className="stock-card">
-          <img src={stock.logo} alt="logo" className="stock-card-img" />
-          <div className="stock-card-details">
-            <h3>{stock.name}</h3>
-            <div>Price: {stock.price}</div>
-            <div>Quantity: {stock.quantity}</div>
+    <div className="orders-container">
+      <h1>Orders</h1>
+      <div className="orders-center">
+        {orders.map((stock, index) => (
+          <div key={index} className="order-card">
+          <img src={stock.logo} alt="logo" className="order-card-img" />
+          <div className="order-card-details">
+            <h3 className="order-card-title">{stock.name}</h3>
+            <div className="order-card-info">Price: {stock.price}</div>
+            <div className="order-card-info">Quantity: {stock.quantity}</div>
+            <div className="order-card-options">
+              <button className="order-buy-btn" onClick={handleSell}>Sell</button>
+            </div>
+            <div className="order-card-info">
+              Amount: {stock.price * stock.quantity}
+            </div>
           </div>
         </div>
-      ))}
+        ))}
+      </div>
+      <div className="total-amount">Total Amount: {totalAmount}</div>
     </div>
   );
 };
