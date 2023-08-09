@@ -4,7 +4,12 @@ import "./Header.css";
 
 function Header()
 {
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  const handleLogout = () =>{
+    alert("Are u sure to Logout");
+    navigate('/')
+  }
     return(
        
         <div className="nav">
@@ -12,7 +17,7 @@ function Header()
     
         <p onClick={() => navigate("/watchlist")}>Watchlist</p> 
         <p onClick={() => navigate("/orders")}>Orders</p> 
-        <p onClick={() => navigate("/")}>Logout</p>
+        <p onClick={() => handleLogout()}>Logout</p>
         
         
       

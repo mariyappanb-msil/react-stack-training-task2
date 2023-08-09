@@ -9,20 +9,20 @@ const Login = () => {
 
   const handleSubmit = (e) => {
     e.preventDefault();
-
+  
     const storedData = JSON.parse(localStorage.getItem("formData")) || [];
     console.log(storedData, "existingData");
-
+  
     const user = storedData.find((data) => {
-      if (data.username === name && data.password === password) {
-        alert("Welcome"+ " "+name);
-        navigate('/watchlist');
-        
-      }
-      else{
-        alert("enter valid details to login")
-      }
+      return data.username === name && data.password === password;
     });
+  
+    if (user) {
+      alert("Welcome" + " " + name);
+      navigate('/watchlist');
+    } else {
+      alert("Enter valid details to login");
+    }
   };
 
   return (
