@@ -3,6 +3,7 @@ import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Watchlist from "./pages/Watchlist/Watchlist";
 import Login from './pages/Auth/Login.jsx'
 import Registration from './pages/Auth/Registration.jsx'
+import Orders from "./pages/Orders/Orders";
 
 function App() {
   return (
@@ -11,6 +12,8 @@ function App() {
       <Route path="/" element={<Login />} />
       <Route path="/reg" element={<Registration />} />
         <Route path="/watchlist" element={<Watchlist />} />
+        <Route path="/orders" element={<Orders />} />
+
       </Routes>
     </Router>
   );
