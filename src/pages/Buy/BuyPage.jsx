@@ -1,7 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import './BuyPage.css';
-import stocksData from "../../common/stocksData.json";
 
 function Buy() {
   const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem("BuyStocks")) || []);
@@ -36,6 +35,7 @@ function Buy() {
 
   return (
     <div>
+      <Header/>
       <h2 className="sell-heading">Stocks for Buy</h2>
       {storedStocks.map((stock, index) => (
         <div key={index} className="sell-stock-card">
