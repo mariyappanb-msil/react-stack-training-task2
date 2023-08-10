@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header/Header";
+
 
 function Orders() {
   const [orderStocks, setOrderStocks] = useState(
@@ -22,6 +24,7 @@ function Orders() {
 
   return (
     <div>
+      <Header/>
       <h2 className="sell-heading">Ordered Stocks</h2>
       {orderStocks.map((stock, index) => (
         <div key={index} className="sell-stock-card">

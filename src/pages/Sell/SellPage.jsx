@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import Header from "../../components/Header/Header";
 
 
 function Buy() {
@@ -32,6 +33,8 @@ function Buy() {
 
   return (
     <div>
+            <Header/>
+
       <h2 className="sell-heading">Stocks for Sell</h2>
       {storedStocks.map((stock, index) => (
         <div key={index} className="sell-stock-card">
