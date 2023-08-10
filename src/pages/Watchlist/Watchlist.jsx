@@ -12,6 +12,31 @@ function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
   const navigate = useNavigate(); // Hook for navigation
 
+  const handleBuyClick = (stock) => {
+    // Get existing stored stocks from local storage
+    const storedStocks = JSON.parse(localStorage.getItem("BuyStocks")) || [];
+
+    // Check if the stock is already in the stored stocks
+    const stockExists = storedStocks.some((storedStock) => storedStock.name === stock.name);
+
+    // If the stock does not exist, add it
+    if (!stockExists) {
+      // Create a new stock object with a quantity of 1
+      const sellStock = { ...stock, quantity: 1 };
+
+      // Add the new stock object to the array
+      storedStocks.push(sellStock);
+
+      // Store the updated array in local storage
+      localStorage.setItem("BuyStocks", JSON.stringify(storedStocks));
+    }
+
+    // Navigate to the sell page
+    navigate("/buy");
+
+    
+  };
+
   const handleSellClick = (stock) => {
     // Get existing stored stocks from local storage
     const storedStocks = JSON.parse(localStorage.getItem("SellStocks")) || [];
@@ -33,7 +58,7 @@ function Watchlist() {
 
     // Navigate to the sell page
     navigate("/sell");
-  };
+  }
 
   return (
     <div>
@@ -52,7 +77,7 @@ function Watchlist() {
 
           <div className="stock-card-options">
             {/* Pass the stock data to the handleSellClick function */}
-            <button className="buybtn" onClick={() => handleSellClick(stock)}>
+            <button className="buybtn" onClick={() => handleBuyClick(stock)}>
               Buy
             </button>
             {/* Pass the stock data to the handleSellClick function */}

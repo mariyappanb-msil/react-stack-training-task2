@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import './SellPage.css';
 
-function Sell() {
+
+function Buy() {
   const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem("SellStocks")) || []);
   const navigate = useNavigate(); // Hook for navigation
 
@@ -22,17 +22,17 @@ function Sell() {
     }
   };
 
-  const handleBuyNow = (stock) => {
-    const selectedStock = { ...stock, quantity: stock.quantity }; // Set quantity to stock.quantity when adding to OrderStocks
-    const existingOrderStocks = JSON.parse(localStorage.getItem("OrderStocks")) || [];
+  const handleSellNow = (stock) => {
+    const selectedStock = { ...stock, quantity: stock.quantity }; 
+    const existingOrderStocks = JSON.parse(localStorage.getItem("OrderSellStocks")) || [];
     const updatedOrderStocks = [...existingOrderStocks, selectedStock];
-    localStorage.setItem("OrderStocks", JSON.stringify(updatedOrderStocks));
+    localStorage.setItem("OrderSellStocks", JSON.stringify(updatedOrderStocks));
     navigate("/orders");
   };
 
   return (
     <div>
-      <h2 className="sell-heading">Stocks for Sale</h2>
+      <h2 className="sell-heading">Stocks for Sell</h2>
       {storedStocks.map((stock, index) => (
         <div key={index} className="sell-stock-card">
           <div className="sell-stock-card-details">
@@ -47,7 +47,7 @@ function Sell() {
               </div>
             </div>
             <div className="sell-buy-button-container">
-              <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock)}>Buy Now</div>
+              <div className="sell-buynowbtn" onClick={() => handleSellNow(stock)}>Sell Now</div>
             </div>
           </div>
         </div>
@@ -56,4 +56,4 @@ function Sell() {
   );
 }
 
-export default Sell;
+export default Buy;
