@@ -7,7 +7,7 @@ import './BuyPage.css';
 function Buy() {
   const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem("BuyStocks")) || []);
   const [stocks, setStocks] = useState(stocksData);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate(); 
 
   const handleIncreaseQuantity = (index) => {
     const updatedStocks = [...storedStocks];
