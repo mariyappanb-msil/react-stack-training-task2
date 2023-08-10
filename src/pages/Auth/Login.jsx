@@ -1,15 +1,17 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "./Auth";
 
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
+  const auth = useAuth();
 
   const handleSubmit = (e) => {
     e.preventDefault();
-  
+    auth.login(name);
     const storedData = JSON.parse(localStorage.getItem("formData")) || [];
     console.log(storedData, "existingData");
   
@@ -19,7 +21,7 @@ const Login = () => {
   
     if (user) {
       alert("Welcome" + " " + name);
-      localStorage.setItem(name, JSON.stringify([]));
+      sessionStorage.setItem(name, JSON.stringify([]));
       navigate('/watchlist');
     } else {
       alert("Enter valid details to login");

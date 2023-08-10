@@ -1,3 +1,4 @@
+
 import React, { useState } from "react";
 import stocksData from "../../common/stocksData.json";
 import "./watchlist.css";
@@ -17,7 +18,7 @@ function Watchlist() {
     const stockExists = storedStocks.some(
       (storedStock) => storedStock.name === stock.name
     );
-    console.log("SSSS",stockExists)
+    console.log(stockExists)
     // If the stock does not exist, add it
     if (!stockExists) {
       // Create a new stock object with a quantity of 1

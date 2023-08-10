@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 const Registration = () => {
   const navigate = useNavigate();
   const [data, setData] = useState({
-    Email: "",
+    email: "",
     username: "",
     password: "",
     mobileNumber: "",
@@ -24,14 +24,14 @@ const Registration = () => {
     }
   }, []);
 
-  const { Email, username, password, mobileNumber, dateOfBirth } = data;
+  const { email, username, password, mobileNumber, dateOfBirth } = data;
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
     let errorMessage = "";
 
-    if (name === "Email") {
-      if (value !== "" && !validateEmail(value)) {
+    if (name === "email") {
+      if (value !== "" && !validateemail(value)) {
         errorMessage = "Invalid email address";
       }
     }
@@ -61,7 +61,7 @@ const Registration = () => {
     e.preventDefault();
 
     const newFormData = {
-      Email,
+      email,
       username,
       password,
       mobileNumber,
@@ -78,7 +78,7 @@ const Registration = () => {
     localStorage.setItem("formData", JSON.stringify(updatedData));
     setLocalData(updatedData);
     setData({
-      Email: "",
+      email: "",
       username: "",
       password: "",
       mobileNumber: "",
@@ -89,7 +89,7 @@ const Registration = () => {
     navigate('/')
   };
 
-  const validateEmail = (email) => {
+  const validateemail = (email) => {
     const emailPattern = /^[A-Za-z0-9_.]+\@([a-z])+\.[a-z]{3}$/;
     return emailPattern.test(email);
   };
@@ -150,13 +150,13 @@ const Registration = () => {
           <label>Email:</label>
           <input
             type="email"
-            name="Email"
+            name="email"
             placeholder="Email"
-            value={Email}
+            value={email}
             onChange={changeHandler}
             required
           />
-          {data.EmailError && <span className="error">{data.EmailError}</span>}
+          {data.emailError && <span className="error">{data.emailError}</span>}
         </div>
         <div className="form-group">
           <label>Mobile Number:</label>
