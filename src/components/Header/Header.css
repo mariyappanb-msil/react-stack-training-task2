@@ -1,18 +1,26 @@
-.nav {
-    display: flex;
-   
-    padding: 10px;
-    background-color: #333;
-    color: white;
-  }
+.header-list {
+  display: flex;
+  flex : 1;
+  height: 40px;
+  font-size: medium;
+  padding: 10px;
+  background-color: rgb(12, 12, 12);
+  color: #f2f2f2;
+  cursor: pointer;
+  align-items: center;
+  font-style: 18px;
+}
+.nav-username {
+  display: flex;
   
-  .nav p {
-    margin: 0;
-    padding: 0 15px;
-    cursor: pointer;
-  }
+  flex: 1;
+  align-items: center;
+}
+.log-out {
+  margin-left: 50px;
   
-  .nav p:hover {
-    text-decoration: underline;
-  }
-  
+}
+
+.orders-nav {
+  margin-left: 15px;
+}

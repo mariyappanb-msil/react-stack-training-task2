@@ -19,9 +19,13 @@ const Login = () => {
       return data.username === name && data.password === password;
     });
   
+
+    
     if (user) {
       alert("Welcome" + " " + name);
-      sessionStorage.setItem(name, JSON.stringify([]));
+      const userIdentifier=user.username;
+
+      localStorage.setItem("username", JSON.stringify(userIdentifier));
       navigate('/watchlist');
     } else {
       alert("Enter valid details to login");

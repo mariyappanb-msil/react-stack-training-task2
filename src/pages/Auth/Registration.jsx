@@ -101,9 +101,10 @@ const Registration = () => {
 
   const validatePassword = (password) => {
     const passwordPattern =
-      /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[!@#$%^&*()]).{8,25}$/;
+      /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
     return passwordPattern.test(password);
   };
+  
 
   const validateMobileNumber = (mobileNumber) => {
     const mobileNumberPattern = /^[0-9]{10}$/;
@@ -137,7 +138,7 @@ const Registration = () => {
             name="password"
             placeholder="*******"
             id="password"
-            maxLength={8}
+           
             value={password}
             onChange={changeHandler}
             required

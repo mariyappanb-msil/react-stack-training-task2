@@ -5,16 +5,19 @@ import Header from "../../components/Header/Header";
 import './BuyPage.css';
 
 function Buy() {
-  const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem("BuyStocks")) || []);
+  const user = JSON.parse(localStorage.getItem("username"));
+
+  const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []);
   const [stocks, setStocks] = useState(stocksData);
   const navigate = useNavigate(); 
+
 
   const handleIncreaseQuantity = (index) => {
     const updatedStocks = [...storedStocks];
     if (updatedStocks[index].quantity < stocks[index].quantity) {
       updatedStocks[index].quantity += 1;
       setStoredStocks(updatedStocks);
-      localStorage.setItem("BuyStocks", JSON.stringify(updatedStocks));
+      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStocks));
     }
   };
 
@@ -23,15 +26,15 @@ function Buy() {
     if (updatedStocks[index].quantity > 1) {
       updatedStocks[index].quantity -= 1;
       setStoredStocks(updatedStocks);
-      localStorage.setItem("BuyStocks", JSON.stringify(updatedStocks));
+      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStocks));
     }
   };
 
   const handleBuyNow = (stock) => {
     const selectedStock = { ...stock, quantity: stock.quantity }; // Set quantity to stock.quantity when adding to OrderStocks
-    const existingOrderStocks = JSON.parse(localStorage.getItem("OrderStocks")) || [];
+    const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
     const updatedOrderStocks = [...existingOrderStocks, selectedStock];
-    localStorage.setItem("OrderStocks", JSON.stringify(updatedOrderStocks));
+    localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedOrderStocks));
     navigate("/orders");
   };
 
