@@ -15,4 +15,7 @@
   .nav p:hover {
     text-decoration: underline;
   }
+  .username{
+    margin-left: 100px;
+  }
   

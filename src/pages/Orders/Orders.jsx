@@ -4,12 +4,14 @@ import Header from "../../components/Header/Header";
 
 
 function Orders() {
+  const user = JSON.parse(localStorage.getItem("username"));
+
   const [orderStocks, setOrderStocks] = useState(
-    JSON.parse(localStorage.getItem("OrderStocks")) || []
+    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
   );
   const [orderSellStocks, setOrderSellStocks] = useState(
-    JSON.parse(localStorage.getItem("OrderSellStocks")) || []
-  )
+    JSON.parse(localStorage.getItem(`OrderSellStocks_${user}`)) || []
+  );
 
   // Calculate the total amount for all ordered stocks
   const totalAmount = orderStocks.reduce(

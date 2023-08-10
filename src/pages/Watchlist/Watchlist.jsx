@@ -9,10 +9,13 @@ import Header from "../../components/Header/Header";
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
   const navigate = useNavigate(); // Hook for navigation
+  const user = JSON.parse(localStorage.getItem("username"));
+  console.log(user)
+
 
   const handleBuyClick = (stock) => {
     // Get existing stored stocks from local storage
-    const storedStocks = JSON.parse(localStorage.getItem("BuyStocks")) || [];
+    const storedStocks = JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || [];
 
     // Check if the stock is already in the stored stocks
     const stockExists = storedStocks.some(
@@ -28,7 +31,7 @@ function Watchlist() {
       storedStocks.push(sellStock);
 
       // Store the updated array in local storage
-      localStorage.setItem("BuyStocks", JSON.stringify(storedStocks));
+      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(storedStocks));
     }
 
     // Navigate to the sell page
@@ -37,28 +40,29 @@ function Watchlist() {
 
   const handleSellClick = (stock) => {
     // Get existing stored stocks from local storage
-    const storedStocks = JSON.parse(localStorage.getItem("SellStocks")) || [];
-
+    const storedStocks = JSON.parse(localStorage.getItem(`SellStocks_${user}`)) || [];
+  
     // Check if the stock is already in the stored stocks
     const stockExists = storedStocks.some(
       (storedStock) => storedStock.name === stock.name
     );
-
+  
     // If the stock does not exist, add it
     if (!stockExists) {
       // Create a new stock object with a quantity of 1
       const sellStock = { ...stock, quantity: 1 };
-
+  
       // Add the new stock object to the array
       storedStocks.push(sellStock);
-
+  
       // Store the updated array in local storage
-      localStorage.setItem("SellStocks", JSON.stringify(storedStocks));
+      localStorage.setItem(`SellStocks_${user}`, JSON.stringify(storedStocks));
     }
-
+  
     // Navigate to the sell page
     navigate("/sell");
   };
+  
 
   return (
     <div>

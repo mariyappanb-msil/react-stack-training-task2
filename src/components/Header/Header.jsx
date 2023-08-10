@@ -4,6 +4,8 @@ import "./Header.css";
 import { useAuth } from "../../pages/Auth/Auth";
 function Header()
 {
+  const user = JSON.parse(localStorage.getItem("username"));
+
   const navigate = useNavigate();
   const auth = useAuth();
   
@@ -20,10 +22,11 @@ function Header()
         <p onClick={() => navigate("/watchlist")}>Watchlist</p> 
         <p onClick={() => navigate("/orders")}>Orders</p> 
         <p onClick={() => hanldeLogout()}>Logout</p>
+        <p className="username">{user}</p>
         
         
       
-      </div>
+      </div> 
     )
 
 
