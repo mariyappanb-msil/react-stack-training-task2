@@ -19,8 +19,13 @@
 .log-out {
   margin-left: 50px;
   
-}
-
-.orders-nav {
-  margin-left: 15px;
-}
+  .nav p {
+    margin: 0;
+    padding: 0 15px;
+    cursor: pointer;
+  }
+  
+  .nav p:hover {
+    text-decoration: underline;
+  }
+  
