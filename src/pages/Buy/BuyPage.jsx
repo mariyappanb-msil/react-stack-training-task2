@@ -1,5 +1,7 @@
 import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import stocksData from "../../common/stocksData.json";
+import Header from "../../components/Header/Header";
 import './BuyPage.css';
 
 function Buy() {
