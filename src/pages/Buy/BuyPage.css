@@ -60,7 +60,7 @@
 
 
 .quantity-button {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
   
     color: #333;
     font-size: 18px;
@@ -73,7 +73,7 @@
   }
   
   .quantity-button:hover {
-    background-color: #e9ecef;
+    background-color: #ffffff;
     border-color: #adb5bd;
     color: #333;
   }

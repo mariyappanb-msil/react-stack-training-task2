@@ -5,9 +5,6 @@ import { useNavigate } from "react-router-dom";
 
 import Header from "../../components/Header/Header";
 
-
-
- 
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
   const navigate = useNavigate(); // Hook for navigation
@@ -17,7 +14,9 @@ function Watchlist() {
     const storedStocks = JSON.parse(localStorage.getItem("BuyStocks")) || [];
 
     // Check if the stock is already in the stored stocks
-    const stockExists = storedStocks.some((storedStock) => storedStock.name === stock.name);
+    const stockExists = storedStocks.some(
+      (storedStock) => storedStock.name === stock.name
+    );
 
     // If the stock does not exist, add it
     if (!stockExists) {
@@ -33,8 +32,6 @@ function Watchlist() {
 
     // Navigate to the sell page
     navigate("/buy");
-
-    
   };
 
   const handleSellClick = (stock) => {
@@ -42,7 +39,9 @@ function Watchlist() {
     const storedStocks = JSON.parse(localStorage.getItem("SellStocks")) || [];
 
     // Check if the stock is already in the stored stocks
-    const stockExists = storedStocks.some((storedStock) => storedStock.name === stock.name);
+    const stockExists = storedStocks.some(
+      (storedStock) => storedStock.name === stock.name
+    );
 
     // If the stock does not exist, add it
     if (!stockExists) {
@@ -58,7 +57,7 @@ function Watchlist() {
 
     // Navigate to the sell page
     navigate("/sell");
-  }
+  };
 
   return (
     <div>
@@ -67,11 +66,10 @@ function Watchlist() {
       <h2 className="heading">Stock Watchlist</h2>
       {stocks.map((stock, index) => (
         <div key={index} className="stock-card">
-          <img src={stock.logo} alt="logo" className="stock-card-img" />
           <div className="stock-card-details">
             <h3>{stock.name}</h3>
 
-            <div className="stock-price">Price :  ${stock.price.toFixed(2)}</div>
+            <div className="stock-price">Price : ${stock.price.toFixed(2)}</div>
             <div>Quantity : {stock.quantity}</div>
           </div>
 
