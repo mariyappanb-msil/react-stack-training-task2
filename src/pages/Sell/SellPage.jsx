@@ -25,13 +25,13 @@ function Sell() {
       setErrorMessage("Please enter a valid quantity.");
       return;
     }
-
+  
     const availableQuantity = stock.quantity;
     if (+inputQuantity > availableQuantity) {
       setErrorMessage("Quantity exceeded the available quantity.");
       return;
     }
-
+  
     const selectedStock = { ...stock, quantity: +inputQuantity };
     const existingOrderStocks = JSON.parse(
       localStorage.getItem(`OrderSellStocks_${user}`) || "[]"
@@ -41,8 +41,20 @@ function Sell() {
       `OrderSellStocks_${user}`,
       JSON.stringify(updatedOrderStocks)
     );
+  
+    // Remove the stock from BuyStocks local storage
+    const existingBuyStocks = JSON.parse(
+      localStorage.getItem(`BuyStocks_${user}`) || "[]"
+    );
+    const updatedBuyStocks = existingBuyStocks.filter((item) => item.name !== stock.name);
+    localStorage.setItem(
+      `BuyStocks_${user}`,
+      JSON.stringify(updatedBuyStocks)
+    );
+  
     navigate("/orders");
   };
+  
 
   const handleQuantityChange = (event) => {
     const newQuantity = event.target.value;
