@@ -7,7 +7,7 @@ function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
-    JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
   );
   const [inputQuantity, setInputQuantity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
@@ -37,10 +37,13 @@ function Sell() {
       localStorage.getItem(`OrderSellStocks_${user}`) || "[]"
     );
     const updatedOrderStocks = [...existingOrderStocks, selectedStock];
+    
+
     localStorage.setItem(
       `OrderSellStocks_${user}`,
       JSON.stringify(updatedOrderStocks)
     );
+    
     navigate("/orders");
   };
 

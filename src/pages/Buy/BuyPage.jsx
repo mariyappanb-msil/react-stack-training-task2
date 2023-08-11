@@ -11,6 +11,7 @@ function Buy() {
   const [stocks, setStocks] = useState(stocksData);
   const [inputQuantity, setInputQuantity] = useState(1);
   const [selectedStockIndex, setSelectedStockIndex] = useState(null);
+  const [isConfirmingBuy, setIsConfirmingBuy] = useState(false); 
   console.log("FOCUS", selectedStockIndex)
   const navigate = useNavigate();
 
@@ -20,13 +21,7 @@ function Buy() {
 
   const handleInputBlur = (index) => {
     if (inputQuantity !== storedStocks[index].quantity) {
-      const confirmBuy = window.confirm("Are you confirm to buy");
-      
-      if (confirmBuy) {
-        quantitySet(index);
-      } else {
-        setInputQuantity(storedStocks[index].quantity);
-      }
+      quantitySet(index);
     }
     setSelectedStockIndex(null);
   };
@@ -39,18 +34,23 @@ function Buy() {
   };
 
   const handleBuyNow = (stock, index) => {
-    const selectedStock = { ...stock, quantity: inputQuantity };
-    const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
-    const updatedOrderStocks = [...existingOrderStocks, selectedStock];
-    localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedOrderStocks));
-  
-    // Remove the bought stock from storedStocks
-    const updatedStoredStocks = [...storedStocks];
-    updatedStoredStocks.splice(index, 1);
-    setStoredStocks(updatedStoredStocks);
-    localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStoredStocks));
-  
-    navigate("/orders");
+    if (isConfirmingBuy) { // If confirming buy, execute the buy action
+      const selectedStock = { ...stock, quantity: inputQuantity };
+      const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
+      const updatedOrderStocks = [...existingOrderStocks, selectedStock];
+      localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedOrderStocks));
+
+      // Remove the bought stock from storedStocks
+      const updatedStoredStocks = [...storedStocks];
+      updatedStoredStocks.splice(index, 1);
+      setStoredStocks(updatedStoredStocks);
+      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStoredStocks));
+
+      navigate("/orders");
+    } else {
+      // Toggle to confirm buy state
+      setIsConfirmingBuy(true);
+    }
   };
 
   const handleQuantityChange = (event) => {
@@ -66,15 +66,13 @@ function Buy() {
     0
   );
 
- 
-  
   return (
     <div>
       <Header />
       <h2 className="sell-heading">Stocks for Buy</h2>
       {storedStocks.map((stock, index) => {
         const quantityLeft = Math.max(stocks[index].quantity - inputQuantity, 0);
-        
+
         return (
           <div key={index} className="sell-stock-card">
             <div className="sell-stock-card-details">
@@ -102,9 +100,12 @@ function Buy() {
                 </div>
               </div>
               <div className="sell-buy-button-container">
-                <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock, index)}>Buy Now</div>
+                {isConfirmingBuy ? (
+                  <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock, index)}>Confirm Buy</div>
+                ) : (
+                  <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock, index)}>Buy Now</div>
+                )}
               </div>
-              
             </div>
             Amount: ${stock.price.toFixed(2) * stock.quantity.toFixed(2)}
           </div>
