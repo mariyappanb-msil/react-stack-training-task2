@@ -8,7 +8,7 @@ import Header from "../../components/Header/Header";
 
 function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
-  const navigate = useNavigate(); // Hook for navigation
+  const navigate = useNavigate(); 
   const user = JSON.parse(localStorage.getItem("username"));
   console.log(user)
 
@@ -34,7 +34,7 @@ function Watchlist() {
       localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(storedStocks));
     }
 
-    // Navigate to the sell page
+    
     navigate("/buy");
   };
 
@@ -59,7 +59,7 @@ function Watchlist() {
       localStorage.setItem(`SellStocks_${user}`, JSON.stringify(storedStocks));
     }
   
-    // Navigate to the sell page
+    
     navigate("/sell");
   };
   
@@ -79,11 +79,11 @@ function Watchlist() {
           </div>
 
           <div className="stock-card-options">
-            {/* Pass the stock data to the handleSellClick function */}
+            
             <button className="buybtn" onClick={() => handleBuyClick(stock)}>
               Buy
             </button>
-            {/* Pass the stock data to the handleSellClick function */}
+            
             <button className="sellbtn" onClick={() => handleSellClick(stock)}>
               Sell
             </button>

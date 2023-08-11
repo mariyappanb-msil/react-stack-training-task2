@@ -1,17 +1,17 @@
 import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "./Auth";
+
 
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
   const navigate = useNavigate();
-  const auth = useAuth();
+
 
   const handleSubmit = (e) => {
     e.preventDefault();
-    auth.login(name);
+   
     const storedData = JSON.parse(localStorage.getItem("formData")) || [];
     console.log(storedData, "existingData");
   
