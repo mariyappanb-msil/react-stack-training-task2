@@ -7,8 +7,12 @@ function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
+<<<<<<< HEAD
     JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
   );
+=======
+    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [] );
+>>>>>>> a4cca0da2990afa1a0439e8e6828d707df6829a5
   const [inputQuantity, setInputQuantity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedItemIndex, setSelectedItemIndex] = useState(null); // Track the selected item
@@ -25,13 +29,13 @@ function Sell() {
       setErrorMessage("Please enter a valid quantity.");
       return;
     }
-
+  
     const availableQuantity = stock.quantity;
     if (+inputQuantity > availableQuantity) {
       setErrorMessage("Quantity exceeded the available quantity.");
       return;
     }
-
+  
     const selectedStock = { ...stock, quantity: +inputQuantity };
     const existingOrderStocks = JSON.parse(
       localStorage.getItem(`OrderSellStocks_${user}`) || "[]"
@@ -43,9 +47,24 @@ function Sell() {
       `OrderSellStocks_${user}`,
       JSON.stringify(updatedOrderStocks)
     );
+<<<<<<< HEAD
     
+=======
+  
+    // Remove the stock from BuyStocks local storage
+    const existingBuyStocks = JSON.parse(
+      localStorage.getItem(`BuyStocks_${user}`) || "[]"
+    );
+    const updatedBuyStocks = existingBuyStocks.filter((item) => item.name !== stock.name);
+    localStorage.setItem(
+      `BuyStocks_${user}`,
+      JSON.stringify(updatedBuyStocks)
+    );
+  
+>>>>>>> a4cca0da2990afa1a0439e8e6828d707df6829a5
     navigate("/orders");
   };
+  
 
   const handleQuantityChange = (event) => {
     const newQuantity = event.target.value;
