@@ -66,8 +66,6 @@ function Sell() {
               <div className="sell-stock-quantity">
                 Quantity: {stock.quantity}
               </div>
-            </div>
-            <div className="sell-buy-button-container">
               {selectedItemIndex === index ? (
                 <>
                   <input
@@ -84,6 +82,11 @@ function Sell() {
               ) : (
                 <div className="sell-buynowbtn" onClick={() => handleSellNow(index)}>
                   Sell Now
+                </div>
+              )}
+              {inputQuantity !== "" && !isNaN(inputQuantity) && +inputQuantity > 0 && (
+                <div className="sell-stock-total-amount">
+                  Total Amount: ${(stock.price * +inputQuantity).toFixed(2)}
                 </div>
               )}
             </div>
