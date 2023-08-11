@@ -7,12 +7,7 @@ function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
-<<<<<<< HEAD
-    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
-  );
-=======
     JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [] );
->>>>>>> a4cca0da2990afa1a0439e8e6828d707df6829a5
   const [inputQuantity, setInputQuantity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedItemIndex, setSelectedItemIndex] = useState(null); // Track the selected item
@@ -47,9 +42,6 @@ function Sell() {
       `OrderSellStocks_${user}`,
       JSON.stringify(updatedOrderStocks)
     );
-<<<<<<< HEAD
-    
-=======
   
     // Remove the stock from BuyStocks local storage
     const existingBuyStocks = JSON.parse(
@@ -61,7 +53,6 @@ function Sell() {
       JSON.stringify(updatedBuyStocks)
     );
   
->>>>>>> a4cca0da2990afa1a0439e8e6828d707df6829a5
     navigate("/orders");
   };
   
