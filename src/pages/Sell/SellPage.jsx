@@ -7,31 +7,32 @@ function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
-    JSON.parse(localStorage.getItem(`SellStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
   );
   const [stocks, setStocks] = useState(stocksData);
-  const navigate = useNavigate(); // Hook for navigation
-
-  const handleIncreaseQuantity = (index) => {
-    const updatedStocks = [...storedStocks];
-    if (updatedStocks[index].quantity < stocks[index].quantity) {
-      updatedStocks[index].quantity += 1;
-      setStoredStocks(updatedStocks);
-      localStorage.setItem(`SellStocks_${user}`, JSON.stringify(updatedStocks));
-    }
-  };
-
-  const handleDecreaseQuantity = (index) => {
-    const updatedStocks = [...storedStocks];
-    if (updatedStocks[index].quantity > 1) {
-      updatedStocks[index].quantity -= 1;
-      setStoredStocks(updatedStocks);
-      localStorage.setItem(`SellStocks_${user}`, JSON.stringify(updatedStocks));
-    }
-  };
+  const [inputQuantity, setInputQuantity] = useState("");
+  const [errorMessage, setErrorMessage] = useState("");
+  const [showQuantityInput, setShowQuantityInput] = useState(false);
+  const navigate = useNavigate();
 
   const handleSellNow = (stock) => {
-    const selectedStock = { ...stock, quantity: stock.quantity };
+    setShowQuantityInput(true);
+    setErrorMessage("");
+  };
+
+  const handleConfirmSell = (stock) => {
+    if (inputQuantity === "" || isNaN(inputQuantity) || +inputQuantity <= 0) {
+      setErrorMessage("Please enter a valid quantity.");
+      return;
+    }
+
+    const availableQuantity = stock.quantity;
+    if (+inputQuantity > availableQuantity) {
+      setErrorMessage("Quantity exceeded the available quantity.");
+      return;
+    }
+
+    const selectedStock = { ...stock, quantity: +inputQuantity };
     const existingOrderStocks = JSON.parse(
       localStorage.getItem(`OrderSellStocks_${user}`) || "[]"
     );
@@ -41,6 +42,12 @@ function Sell() {
       JSON.stringify(updatedOrderStocks)
     );
     navigate("/orders");
+  };
+
+  const handleQuantityChange = (event) => {
+    const newQuantity = event.target.value;
+    setInputQuantity(newQuantity);
+    setErrorMessage("");
   };
 
   return (
@@ -57,20 +64,7 @@ function Sell() {
                 Price: ${stock.price.toFixed(2)}
               </div>
               <div className="sell-stock-quantity">
-                Quantity:
-                <button
-                  className="quantity-button"
-                  onClick={() => handleIncreaseQuantity(index)}
-                >
-                  +
-                </button>
-                {stock.quantity}
-                <button
-                  className="quantity-button"
-                  onClick={() => handleDecreaseQuantity(index)}
-                >
-                  -
-                </button>
+                Quantity: {stock.quantity}
               </div>
               <div
                 style={{
@@ -85,12 +79,24 @@ function Sell() {
               </div>
             </div>
             <div className="sell-buy-button-container">
-              <div
-                className="sell-buynowbtn"
-                onClick={() => handleSellNow(stock)}
-              >
-                Sell Now
-              </div>
+              {!showQuantityInput ? (
+                <div className="sell-buynowbtn" onClick={() => handleSellNow(stock)}>
+                  Sell Now
+                </div>
+              ) : (
+                <>
+                  <input
+                    type="number"
+                    placeholder="Enter quantity"
+                    value={inputQuantity}
+                    onChange={handleQuantityChange}
+                  />
+                  {errorMessage && <div style={{ color: "red" }}>{errorMessage}</div>}
+                  <div className="sell-buynowbtn" onClick={() => handleConfirmSell(stock)}>
+                    Confirm Sell
+                  </div>
+                </>
+              )}
             </div>
           </div>
         </div>
