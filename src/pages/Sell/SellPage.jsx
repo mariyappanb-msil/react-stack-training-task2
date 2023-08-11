@@ -7,8 +7,7 @@ function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
-    JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
-  );
+    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [] );
   const [inputQuantity, setInputQuantity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
   const [selectedItemIndex, setSelectedItemIndex] = useState(null); // Track the selected item
