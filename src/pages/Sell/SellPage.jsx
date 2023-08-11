@@ -9,14 +9,14 @@ function Sell() {
   const [storedStocks, setStoredStocks] = useState(
     JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
   );
-  const [stocks, setStocks] = useState(stocksData);
   const [inputQuantity, setInputQuantity] = useState("");
   const [errorMessage, setErrorMessage] = useState("");
-  const [showQuantityInput, setShowQuantityInput] = useState(false);
+  const [selectedItemIndex, setSelectedItemIndex] = useState(null); // Track the selected item
   const navigate = useNavigate();
 
-  const handleSellNow = (stock) => {
-    setShowQuantityInput(true);
+  const handleSellNow = (index) => {
+    setSelectedItemIndex(index);
+    setInputQuantity(""); // Reset input quantity when clicking "Sell Now"
     setErrorMessage("");
   };
 
@@ -66,24 +66,9 @@ function Sell() {
               <div className="sell-stock-quantity">
                 Quantity: {stock.quantity}
               </div>
-              <div
-                style={{
-                  color: "red",
-                  fontWeight: "bold",
-                  marginTop: "10px",
-                }}
-              >
-                {stock.quantity === stocks[index].quantity ? (
-                  <div> Sell Over</div>
-                ) : null}
-              </div>
             </div>
             <div className="sell-buy-button-container">
-              {!showQuantityInput ? (
-                <div className="sell-buynowbtn" onClick={() => handleSellNow(stock)}>
-                  Sell Now
-                </div>
-              ) : (
+              {selectedItemIndex === index ? (
                 <>
                   <input
                     type="number"
@@ -96,6 +81,10 @@ function Sell() {
                     Confirm Sell
                   </div>
                 </>
+              ) : (
+                <div className="sell-buynowbtn" onClick={() => handleSellNow(index)}>
+                  Sell Now
+                </div>
               )}
             </div>
           </div>
