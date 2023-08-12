@@ -1,0 +1,37 @@
+/* Sell.css */
+.sell-stock-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-bottom: 20px;
+  }
+  
+  .sell-stock-table th,
+  .sell-stock-table td {
+    padding: 10px;
+    text-align: center;
+    border: 1px solid #ccc;
+  }
+  
+  .sell-stock-table th {
+    background-color: #f2f2f2;
+  }
+  
+  .sell-buynowbtn {
+    cursor: pointer;
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: #fff;
+    border-radius: 4px;
+    width : 124px
+
+  }
+  
+  .sell-buynowbtn:hover {
+    background-color: #0056b3;
+  }
+  
+  .error-message {
+    color: red;
+    margin-top: 5px;
+  }
+  

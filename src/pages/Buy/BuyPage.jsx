@@ -11,8 +11,7 @@ function Buy() {
   const [stocks, setStocks] = useState(stocksData);
   const [inputQuantity, setInputQuantity] = useState(1);
   const [selectedStockIndex, setSelectedStockIndex] = useState(null);
-  const [isConfirmingBuy, setIsConfirmingBuy] = useState(false); 
-  console.log("FOCUS", selectedStockIndex)
+  const [isConfirmingBuy, setIsConfirmingBuy] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -34,7 +33,8 @@ function Buy() {
   };
 
   const handleBuyNow = (stock, index) => {
-    if (isConfirmingBuy) { // If confirming buy, execute the buy action
+    if (isConfirmingBuy) {
+      // If confirming buy, execute the buy action
       const selectedStock = { ...stock, quantity: inputQuantity };
       const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
       const updatedOrderStocks = [...existingOrderStocks, selectedStock];
@@ -45,6 +45,10 @@ function Buy() {
       updatedStoredStocks.splice(index, 1);
       setStoredStocks(updatedStoredStocks);
       localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStoredStocks));
+
+      // Reset confirming state and input quantity
+      setIsConfirmingBuy(false);
+      setInputQuantity(1);
 
       navigate("/orders");
     } else {
@@ -70,47 +74,61 @@ function Buy() {
     <div>
       <Header />
       <h2 className="sell-heading">Stocks for Buy</h2>
-      {storedStocks.map((stock, index) => {
-        const quantityLeft = Math.max(stocks[index].quantity - inputQuantity, 0);
 
-        return (
-          <div key={index} className="sell-stock-card">
-            <div className="sell-stock-card-details">
-              <div>
-                <h3 className="sell-stock-name">{stock.name}</h3>
-                <div className="sell-stock-price">Price: ${stock.price.toFixed(2)}</div>
-                <div>Total Quantity : {stocks[index].quantity}</div>
-                <div className="sell-stock-quantity">
-                  Quantity :
-                  <div className="input-quan">
-                    <input
-                      type="number"
-                      id="quantity"
-                      value={selectedStockIndex === index ? inputQuantity : stock.quantity}
-                      onChange={handleQuantityChange}
-                      onBlur={() => handleInputBlur(index)}
-                      onFocus={() => setSelectedStockIndex(index)}
-                      min="1"
-                      max={stocks[index].quantity + 1}
-                    />
-                  </div>
+      <table className="stock-table">
+        <thead>
+          <tr>
+            <th>Stock Name</th>
+            <th>Price</th>
+            <th>Total Quantity</th>
+            <th>Quantity</th>
+            <th>Action</th>
+            <th>Amount</th>
+          </tr>
+        </thead>
+        <tbody>
+          {storedStocks.map((stock, index) => (
+            <tr key={index} className="sell-stock-card">
+              <td>{stock.name}</td>
+              <td>${stock.price.toFixed(2)}</td>
+              <td>{stocks[index].quantity}</td>
+              <td>
+                <div className="input-quan">
+                  <input
+                    type="number"
+                    id="quantity"
+                    value={selectedStockIndex === index ? inputQuantity : stock.quantity}
+                    onChange={(event) => {
+                      handleQuantityChange(event);
+                      handleInputBlur(index);
+                    }} 
+                    min="1"
+                    max={stocks[index].quantity + 1}
+                  />
+                </div>
+                {inputQuantity > stocks[index].quantity && (
                   <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>
-                    {inputQuantity > stocks[index].quantity ? <div>Not have enough quantity</div> : null}
+                    Not enough quantity
+                  </div>
+                )}
+              </td>
+              <td>
+                <div className="sell-buy-button-container">
+                  <div
+                    className="sell-buynowbtn"
+                    onClick={() => handleBuyNow(stock, index)}
+                  >
+                    {isConfirmingBuy ? "Confirm to Buy" : "Buy Now"}
                   </div>
                 </div>
-              </div>
-              <div className="sell-buy-button-container">
-                {isConfirmingBuy ? (
-                  <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock, index)}>Confirm Buy</div>
-                ) : (
-                  <div className="sell-buynowbtn" onClick={() => handleBuyNow(stock, index)}>Buy Now</div>
-                )}
-              </div>
-            </div>
-            Amount: ${stock.price.toFixed(2) * stock.quantity.toFixed(2)}
-          </div>
-        );
-      })}
+              </td>
+              <td>${(stock.price * stock.quantity).toFixed(2)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+      <div className="total-amount">Total Amount: ${totalAmount.toFixed(2)}</div>
+
     </div>
   );
 }
