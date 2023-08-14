@@ -8,7 +8,7 @@ function Buy() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [storedStocks, setStoredStocks] = useState(
-    JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`BuyPageStocks_${user}`)) || []
   );
   const [stocks, setStocks] = useState(stocksData);
   const [inputQuantities, setInputQuantities] = useState(
@@ -18,67 +18,65 @@ function Buy() {
   const [isConfirmingBuy, setIsConfirmingBuy] = useState(false);
   const navigate = useNavigate();
 
-  useEffect(() => {
-    localStorage.setItem(
-      `InputQuantities_${user}`,
-      JSON.stringify(inputQuantities)
-    );
-  }, [inputQuantities, user]);
-
-  const handleInputQuantiyty = (index) => {
-    if (inputQuantities[index] !== storedStocks[index].quantity) {
-      quantitySet(index);
-    }
-  };
-
-  const quantitySet = (index) => {
+  // function to upadte the quantity for particular item in Local stoarge
+  const quantitySet = (index, newInputQuantity) => {
     const updatedStocks = [...storedStocks];
-    updatedStocks[index].quantity = inputQuantities[index];
+    updatedStocks[index].quantity = newInputQuantity;
     setStoredStocks(updatedStocks);
-    localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStocks));
+    console.log(updatedStocks, "updatedStocks");
+    localStorage.setItem(
+      `BuyPageStocks_${user}`,
+      JSON.stringify(updatedStocks)
+    );
   };
 
   const handleBuyNow = (stock, index) => {
     const selectedQuantity = inputQuantities[index];
     const availableQuantity = stocks[index].quantity;
+    
 
-    if (selectedQuantity > 0 && selectedQuantity <= availableQuantity) {
-      const selectedStock = { ...stock, quantity: selectedQuantity };
+    if (selectedQuantity > 0 && selectedQuantity <= availableQuantity ) {
+      const selectedStock = { ...stock };
       const existingOrderStocks =
         JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
       const updatedOrderStocks = [...existingOrderStocks, selectedStock];
       localStorage.setItem(
-        `OrderStocks_${user}`,
+        `OrderPageStocks_${user}`,
         JSON.stringify(updatedOrderStocks)
       );
-
-      
-      const updatedDupStocks = [ selectedStock];
+      const updatedDupStocks = [selectedStock];
       localStorage.setItem(
-        `OrderDupStocks_${user}`,
-        JSON.stringify(updatedDupStocks))
-
+        `OrderPageDupStocks_${user}`,
+        JSON.stringify(updatedDupStocks)
+      );
       const updatedStoredStocks = [...storedStocks];
       updatedStoredStocks.splice(index, 1);
       setStoredStocks(updatedStoredStocks);
       localStorage.setItem(
-        `BuyStocks_${user}`,
+        `BuyPageStocks_${user}`,
         JSON.stringify(updatedStoredStocks)
       );
-
-      setIsConfirmingBuy(false);
+      setIsConfirmingBuy(true); 
+      
       navigate("/orders");
     } else {
-      setIsConfirmingBuy(true);
+      setIsConfirmingBuy(false); 
     }
   };
 
   const handleQuantityChange = (event, index) => {
     const newInputQuantity = parseInt(event.target.value);
+    console.log(inputQuantities, "inputQuantities");
+    console.log(newInputQuantity, "newInputQuantity");
     setInputQuantities((prevQuantities) =>
-      prevQuantities.map((quantity, i) =>
-        i === index ? newInputQuantity : quantity
-      )
+      prevQuantities.map((quantity, i) => {
+        if (i === index) {
+          quantitySet(index, newInputQuantity);
+          console.log(i, quantity, "i", "q");
+          return newInputQuantity;
+        }
+        return quantity;
+      })
     );
   };
 
@@ -117,7 +115,6 @@ function Buy() {
                     value={inputQuantities[index]}
                     onChange={(event) => {
                       handleQuantityChange(event, index);
-                      handleInputQuantiyty(index);
                     }}
                     min="1"
                   />

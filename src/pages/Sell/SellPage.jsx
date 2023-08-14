@@ -7,10 +7,10 @@ import "./Sell.css";
 function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
   const [sellQuantity, setSellQuantity] = useState(
-    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`OrderPageStocks_${user}`)) || []
   );
   const [storedStocks, setStoredStocks] = useState(
-    JSON.parse(localStorage.getItem(`OrderDupStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`OrderPageDupStocks_${user}`)) || []
   );
   const [inputQuantity, setInputQuantity] = useState(1);
   const [isConfirmingBuy, setIsConfirmingBuy] = useState(false);
@@ -30,7 +30,7 @@ function Sell() {
     const updatedStocks = [...storedStocks];
     updatedStocks[index].quantity = inputQuantity;
     setStoredStocks(updatedStocks);
-    localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedStocks));
+    localStorage.setItem(`OrderPageStocks_${user}`, JSON.stringify(updatedStocks));
   };
 
   const handleBuyNow = (stock, index) => {
@@ -40,10 +40,10 @@ function Sell() {
     if (selectedQuantity > 0 && selectedQuantity <= availableQuantity) {
       const selectedStock = { ...stock, quantity: selectedQuantity };
       const existingOrderStocks =
-        JSON.parse(localStorage.getItem(`OrderSellStocks_${user}`)) || [];
+        JSON.parse(localStorage.getItem(`OrderPageSellStocks_${user}`)) || [];
       const updatedOrderStocks = [...existingOrderStocks, selectedStock];
       localStorage.setItem(
-        `OrderSellStocks_${user}`,
+        `OrderPageSellStocks_${user}`,
         JSON.stringify(updatedOrderStocks)
       );
 
@@ -51,7 +51,7 @@ function Sell() {
       updatedStoredStocks.splice(index, 1);
       setStoredStocks(updatedStoredStocks);
       localStorage.setItem(
-        `OrderDupStocks_${user}`,
+        `OrderPageDupStocks_${user}`,
         JSON.stringify(updatedStoredStocks)
       );
 

@@ -15,7 +15,7 @@ const Registration = () => {
   const [localData, setLocalData] = useState([]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("tradingData");
+    const storedData = localStorage.getItem("RegistrationUserData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       if (Array.isArray(parsedData)) {
@@ -75,7 +75,7 @@ const Registration = () => {
     }
 
     const updatedData = [...localData, newFormData];
-    localStorage.setItem("tradingData", JSON.stringify(updatedData));
+    localStorage.setItem("RegistrationUserData", JSON.stringify(updatedData));
     setLocalData(updatedData);
     setData({
       email: "",
@@ -86,7 +86,7 @@ const Registration = () => {
     });
 
     console.log(data);
-    navigate('/')
+    navigate("/");
   };
 
   const validateemail = (email) => {
@@ -104,7 +104,6 @@ const Registration = () => {
       /^(?=.*[0-9])(?=.*[a-zA-Z])(?=.*[!@#$%^&*])[a-zA-Z0-9!@#$%^&*]{8,20}$/;
     return passwordPattern.test(password);
   };
-  
 
   const validateMobileNumber = (mobileNumber) => {
     const mobileNumberPattern = /^[0-9]{10}$/;
@@ -138,7 +137,6 @@ const Registration = () => {
             name="password"
             placeholder="*******"
             id="password"
-           
             value={password}
             onChange={changeHandler}
             required
@@ -187,7 +185,9 @@ const Registration = () => {
 
         <div className="form-group-1">
           <button className="submit">Submit</button>
-          <p className="signin" onClick={() => navigate('/')}>Sign in</p>
+          <p className="signin" onClick={() => navigate("/")}>
+            Sign in
+          </p>
         </div>
       </form>
     </div>

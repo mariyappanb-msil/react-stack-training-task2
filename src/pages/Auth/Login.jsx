@@ -12,7 +12,7 @@ const Login = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
    
-    const storedData = JSON.parse(localStorage.getItem("tradingData")) || [];
+    const storedData = JSON.parse(localStorage.getItem("RegistrationUserData")) || [];
     console.log(storedData, "existingData");
   
     const user = storedData.find((data) => {

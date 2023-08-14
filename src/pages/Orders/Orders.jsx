@@ -7,10 +7,10 @@ function Orders() {
   const user = JSON.parse(localStorage.getItem("username"));
 
   const [orderStocks, setOrderStocks] = useState(
-    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`OrderPageStocks_${user}`)) || []
   );
   const [orderSellStocks, setOrderSellStocks] = useState(
-    JSON.parse(localStorage.getItem(`OrderSellStocks_${user}`)) || []
+    JSON.parse(localStorage.getItem(`OrderPageSellStocks_${user}`)) || []
   );
 
   // Calculate the total amount for all ordered stocks

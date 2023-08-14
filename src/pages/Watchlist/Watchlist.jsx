@@ -10,12 +10,12 @@ function Watchlist() {
   const [stocks, setStocks] = useState(stocksData);
   const navigate = useNavigate(); 
   const user = JSON.parse(localStorage.getItem("username"));
-  console.log(user)
+
 
 
   const handleBuyClick = (stock) => {
     // Get existing stored stocks from local storage
-    const storedStocks = JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || [];
+    const storedStocks = JSON.parse(localStorage.getItem(`BuyPageStocks_${user}`)) || [];
 
     // Check if the stock is already in the stored stocks
     const stockExists = storedStocks.some(
@@ -31,7 +31,7 @@ function Watchlist() {
       storedStocks.push(sellStock);
 
       // Store the updated array in local storage
-      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(storedStocks));
+      localStorage.setItem(`BuyPageStocks_${user}`, JSON.stringify(storedStocks));
     }
 
     
@@ -40,7 +40,7 @@ function Watchlist() {
 
   const handleSellClick = (stock) => {
     // Get existing stored stocks from local storage
-    const storedStocks = JSON.parse(localStorage.getItem(`SellStocks_${user}`)) || [];
+    const storedStocks = JSON.parse(localStorage.getItem(`SellPageStocks_${user}`)) || [];
   
     // Check if the stock is already in the stored stocks
     const stockExists = storedStocks.some(
@@ -56,7 +56,7 @@ function Watchlist() {
       storedStocks.push(sellStock);
   
       // Store the updated array in local storage
-      localStorage.setItem(`SellStocks_${user}`, JSON.stringify(storedStocks));
+      localStorage.setItem(`SellPageStocks_${user}`, JSON.stringify(storedStocks));
     }
   
     
