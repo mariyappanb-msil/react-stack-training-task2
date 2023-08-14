@@ -15,7 +15,7 @@ const Registration = () => {
   const [localData, setLocalData] = useState([]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("formData");
+    const storedData = localStorage.getItem("tradingData");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       if (Array.isArray(parsedData)) {
@@ -75,7 +75,7 @@ const Registration = () => {
     }
 
     const updatedData = [...localData, newFormData];
-    localStorage.setItem("formData", JSON.stringify(updatedData));
+    localStorage.setItem("tradingData", JSON.stringify(updatedData));
     setLocalData(updatedData);
     setData({
       email: "",

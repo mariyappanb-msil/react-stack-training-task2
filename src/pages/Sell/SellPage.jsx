@@ -2,15 +2,17 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import stocksData from "../../common/stocksData.json";
 import Header from "../../components/Header/Header";
-import './Sell.css';
+import "./Sell.css";
 
-function Buy() {
+function Sell() {
   const user = JSON.parse(localStorage.getItem("username"));
-  const [sellQuantity, setsellQuantity] = useState(JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []);
-  const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []);
-  const [stocks, setStocks] = useState(stocksData);
+  const [sellQuantity, setSellQuantity] = useState(
+    JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || []
+  );
+  const [storedStocks, setStoredStocks] = useState(
+    JSON.parse(localStorage.getItem(`OrderDupStocks_${user}`)) || []
+  );
   const [inputQuantity, setInputQuantity] = useState(1);
-  const [selectedStockIndex, setSelectedStockIndex] = useState(null);
   const [isConfirmingBuy, setIsConfirmingBuy] = useState(false);
   const navigate = useNavigate();
 
@@ -22,43 +24,49 @@ function Buy() {
     if (inputQuantity !== storedStocks[index].quantity) {
       quantitySet(index);
     }
-    setSelectedStockIndex(null);
   };
 
   const quantitySet = (index) => {
     const updatedStocks = [...storedStocks];
     updatedStocks[index].quantity = inputQuantity;
     setStoredStocks(updatedStocks);
-    localStorage.setItem(`SellStocks_${user}`, JSON.stringify(updatedStocks));
+    localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedStocks));
   };
 
   const handleBuyNow = (stock, index) => {
-    if (isConfirmingBuy) {
-      // If confirming buy, execute the buy action
-      const selectedStock = { ...stock, quantity: inputQuantity };
-      const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderSellStocks_${user}`)) || [];
+    const selectedQuantity = inputQuantity;
+    const availableQuantity = sellQuantity[index].quantity;
+
+    if (selectedQuantity > 0 && selectedQuantity <= availableQuantity) {
+      const selectedStock = { ...stock, quantity: selectedQuantity };
+      const existingOrderStocks =
+        JSON.parse(localStorage.getItem(`OrderSellStocks_${user}`)) || [];
       const updatedOrderStocks = [...existingOrderStocks, selectedStock];
-      localStorage.setItem(`OrderSellStocks_${user}`, JSON.stringify(updatedOrderStocks));
+      localStorage.setItem(
+        `OrderSellStocks_${user}`,
+        JSON.stringify(updatedOrderStocks)
+      );
 
- 
+      const updatedStoredStocks = [...storedStocks];
+      updatedStoredStocks.splice(index, 1);
+      setStoredStocks(updatedStoredStocks);
+      localStorage.setItem(
+        `OrderDupStocks_${user}`,
+        JSON.stringify(updatedStoredStocks)
+      );
 
-      // Reset confirming state and input quantity
       setIsConfirmingBuy(false);
       setInputQuantity(1);
 
       navigate("/orders");
     } else {
-      // Toggle to confirm buy state
       setIsConfirmingBuy(true);
     }
   };
 
   const handleQuantityChange = (event) => {
-    const newIndex = selectedStockIndex !== null ? selectedStockIndex : 0;
     const newInputQuantity = parseInt(event.target.value);
-    const maxQuantity = stocks[newIndex].quantity;
-    const clampedQuantity = Math.min(Math.max(newInputQuantity, 1), maxQuantity + 1);
-    setInputQuantity(clampedQuantity);
+    setInputQuantity(newInputQuantity);
   };
 
   const totalAmount = storedStocks.reduce(
@@ -69,7 +77,7 @@ function Buy() {
   return (
     <div>
       <Header />
-      <h2 className="sell-heading">Stocks for Buy</h2>
+      <h2 className="sell-heading">Stocks for Sell</h2>
 
       <table className="stock-table">
         <thead>
@@ -93,17 +101,21 @@ function Buy() {
                   <input
                     type="number"
                     id="quantity"
-                    value={selectedStockIndex === index ? inputQuantity : stock.quantity}
-                    onChange={(event) => {
-                      handleQuantityChange(event);
-                      handleInputBlur(index);
-                    }} 
+                    value={inputQuantity}
+                    onChange={handleQuantityChange}
+                    onBlur={() => handleInputBlur(index)}
                     min="1"
-                    max={sellQuantity[index].quantity + 1}
+                    max={sellQuantity[index].quantity}
                   />
                 </div>
                 {inputQuantity > sellQuantity[index].quantity && (
-                  <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>
+                  <div
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                      marginTop: "10px",
+                    }}
+                  >
                     Not enough quantity
                   </div>
                 )}
@@ -114,7 +126,7 @@ function Buy() {
                     className="sell-buynowbtn"
                     onClick={() => handleBuyNow(stock, index)}
                   >
-                    {isConfirmingBuy ? "Confirm to Buy" : "Buy Now"}
+                    {isConfirmingBuy ? "Confirm to Sell" : "Sell Now"}
                   </div>
                 </div>
               </td>
@@ -123,10 +135,11 @@ function Buy() {
           ))}
         </tbody>
       </table>
-      <div className="total-amount">Total Amount: ${totalAmount.toFixed(2)}</div>
-
+      <div className="total-amount">
+        Total Amount: ${totalAmount.toFixed(2)}
+      </div>
     </div>
   );
 }
 
-export default Buy;
+export default Sell;

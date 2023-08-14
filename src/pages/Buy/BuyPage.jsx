@@ -2,71 +2,88 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import stocksData from "../../common/stocksData.json";
 import Header from "../../components/Header/Header";
-import './BuyPage.css';
+import "./BuyPage.css";
 
 function Buy() {
   const user = JSON.parse(localStorage.getItem("username"));
 
-  const [storedStocks, setStoredStocks] = useState(JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []);
+  const [storedStocks, setStoredStocks] = useState(
+    JSON.parse(localStorage.getItem(`BuyStocks_${user}`)) || []
+  );
   const [stocks, setStocks] = useState(stocksData);
-  const [inputQuantity, setInputQuantity] = useState(1);
-  const [selectedStockIndex, setSelectedStockIndex] = useState(null);
+  const [inputQuantities, setInputQuantities] = useState(
+    storedStocks.map((stock) => stock.quantity || 1)
+  );
+
   const [isConfirmingBuy, setIsConfirmingBuy] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
-    localStorage.setItem(`InputQuantity_${user}`, inputQuantity);
-  }, [inputQuantity, user]);
+    localStorage.setItem(
+      `InputQuantities_${user}`,
+      JSON.stringify(inputQuantities)
+    );
+  }, [inputQuantities, user]);
 
-  const handleInputBlur = (index) => {
-    if (inputQuantity !== storedStocks[index].quantity) {
+  const handleInputQuantiyty = (index) => {
+    if (inputQuantities[index] !== storedStocks[index].quantity) {
       quantitySet(index);
     }
-    setSelectedStockIndex(null);
   };
 
   const quantitySet = (index) => {
     const updatedStocks = [...storedStocks];
-    updatedStocks[index].quantity = inputQuantity;
+    updatedStocks[index].quantity = inputQuantities[index];
     setStoredStocks(updatedStocks);
     localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStocks));
   };
 
   const handleBuyNow = (stock, index) => {
-    if (isConfirmingBuy) {
-      // If confirming buy, execute the buy action
-      const selectedStock = { ...stock, quantity: inputQuantity };
-      const existingOrderStocks = JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
-      const updatedOrderStocks = [...existingOrderStocks, selectedStock];
-      localStorage.setItem(`OrderStocks_${user}`, JSON.stringify(updatedOrderStocks));
+    const selectedQuantity = inputQuantities[index];
+    const availableQuantity = stocks[index].quantity;
 
-      // Remove the bought stock from storedStocks
+    if (selectedQuantity > 0 && selectedQuantity <= availableQuantity) {
+      const selectedStock = { ...stock, quantity: selectedQuantity };
+      const existingOrderStocks =
+        JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
+      const updatedOrderStocks = [...existingOrderStocks, selectedStock];
+      localStorage.setItem(
+        `OrderStocks_${user}`,
+        JSON.stringify(updatedOrderStocks)
+      );
+
+      
+      const updatedDupStocks = [ selectedStock];
+      localStorage.setItem(
+        `OrderDupStocks_${user}`,
+        JSON.stringify(updatedDupStocks))
+
       const updatedStoredStocks = [...storedStocks];
       updatedStoredStocks.splice(index, 1);
       setStoredStocks(updatedStoredStocks);
-      localStorage.setItem(`BuyStocks_${user}`, JSON.stringify(updatedStoredStocks));
+      localStorage.setItem(
+        `BuyStocks_${user}`,
+        JSON.stringify(updatedStoredStocks)
+      );
 
-      // Reset confirming state and input quantity
       setIsConfirmingBuy(false);
-      setInputQuantity(1);
-
       navigate("/orders");
     } else {
-      // Toggle to confirm buy state
       setIsConfirmingBuy(true);
     }
   };
 
-  const handleQuantityChange = (event) => {
-    const newIndex = selectedStockIndex !== null ? selectedStockIndex : 0;
+  const handleQuantityChange = (event, index) => {
     const newInputQuantity = parseInt(event.target.value);
-    const maxQuantity = stocks[newIndex].quantity;
-    const clampedQuantity = Math.min(Math.max(newInputQuantity, 1), maxQuantity + 1);
-    setInputQuantity(clampedQuantity);
+    setInputQuantities((prevQuantities) =>
+      prevQuantities.map((quantity, i) =>
+        i === index ? newInputQuantity : quantity
+      )
+    );
   };
 
   const totalAmount = storedStocks.reduce(
-    (total, stock) => total + stock.price * stock.quantity,
+    (total, stock, index) => total + stock.price * inputQuantities[index],
     0
   );
 
@@ -97,17 +114,22 @@ function Buy() {
                   <input
                     type="number"
                     id="quantity"
-                    value={selectedStockIndex === index ? inputQuantity : stock.quantity}
+                    value={inputQuantities[index]}
                     onChange={(event) => {
-                      handleQuantityChange(event);
-                      handleInputBlur(index);
-                    }} 
+                      handleQuantityChange(event, index);
+                      handleInputQuantiyty(index);
+                    }}
                     min="1"
-                    max={stocks[index].quantity + 1}
                   />
                 </div>
-                {inputQuantity > stocks[index].quantity && (
-                  <div style={{ color: 'red', fontWeight: 'bold', marginTop: '10px' }}>
+                {inputQuantities[index] > stocks[index].quantity && (
+                  <div
+                    style={{
+                      color: "red",
+                      fontWeight: "bold",
+                      marginTop: "10px",
+                    }}
+                  >
                     Not enough quantity
                   </div>
                 )}
@@ -122,13 +144,14 @@ function Buy() {
                   </div>
                 </div>
               </td>
-              <td>${(stock.price * stock.quantity).toFixed(2)}</td>
+              <td>${(stock.price * inputQuantities[index]).toFixed(2)}</td>
             </tr>
           ))}
         </tbody>
       </table>
-      <div className="total-amount">Total Amount: ${totalAmount.toFixed(2)}</div>
-
+      <div className="total-amount">
+        Total Amount: ${totalAmount.toFixed(2)}
+      </div>
     </div>
   );
 }
