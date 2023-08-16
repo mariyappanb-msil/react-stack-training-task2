@@ -1,35 +1,41 @@
-/* OrdersPage.css */
+/* Orders.css */
 
-.sell-heading {
-    font-size: 24px;
-    font-weight: bold;
-    margin-bottom: 20px;
-  }
-  
-  .stock-table {
-    width: 100%;
-    border-collapse: collapse;
-    border: 1px solid #ddd;
-    margin-bottom: 15px;
-  }
-  
-  .stock-table th,
-  .stock-table td {
-    padding: 10px;
-    text-align: left;
-    border-bottom: 1px solid #ddd;
-  }
-  
-  .stock-table th {
-    background-color: #f2f2f2;
-    font-weight: bold;
-  }
-  
-  .total-amount {
-    margin-top: 15px;
-    font-weight: bold;
-    display: flex;
-    justify-content: center;
+.orders-page {
+  padding: 20px;
+}
 
-  }
-  
+.orders-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+  border: 1px solid #ddd;
+}
+
+.orders-table th,
+.orders-table td {
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+}
+
+.orders-table th {
+  background-color: #f5f5f5;
+  font-weight: bold;
+  vertical-align: middle; /* Align header text vertically in the middle */
+}
+
+.orders-table td {
+  text-align: center;
+  vertical-align: middle; /* Align cell content vertically in the middle */
+}
+
+/* Alternate row background color */
+.orders-table tbody tr:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.no-orders {
+  margin-top: 20px;
+  font-style: italic;
+  color: #777;
+  text-align: center;
+}
