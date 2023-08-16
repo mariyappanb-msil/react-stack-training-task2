@@ -38,7 +38,7 @@ function Buy() {
     if (selectedQuantity > 0 && selectedQuantity <= availableQuantity ) {
       const selectedStock = { ...stock };
       const existingOrderStocks =
-        JSON.parse(localStorage.getItem(`OrderStocks_${user}`)) || [];
+        JSON.parse(localStorage.getItem(`OrderPageStocks_${user}`)) || [];
       const updatedOrderStocks = [...existingOrderStocks, selectedStock];
       localStorage.setItem(
         `OrderPageStocks_${user}`,

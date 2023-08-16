@@ -6,14 +6,18 @@ import { useNavigate } from "react-router-dom";
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
+  const [loginData, setLoginData] = useState("")
   const navigate = useNavigate();
 
 
   const handleSubmit = (e) => {
     e.preventDefault();
    
-    const storedData = JSON.parse(localStorage.getItem("RegistrationUserData")) || [];
+    const storedData = JSON.parse(localStorage.getItem("Users")) || [];
     console.log(storedData, "existingData");
+
+
+
   
     const user = storedData.find((data) => {
       return data.username === name && data.password === password;
@@ -21,11 +25,20 @@ const Login = () => {
   
 
     
+    
     if (user) {
       alert("Welcome" + " " + name);
-      const userIdentifier=user.username;
 
-      localStorage.setItem("username", JSON.stringify(userIdentifier));
+      const updatedData = storedData.map(data => {
+        if (data.username === name && data.password === password) {
+          return { ...data, login_status: "login" };
+        }
+        return data;
+      });
+
+      localStorage.setItem("Users", JSON.stringify(updatedData));
+      // localStorage.setItem("username", JSON.stringify(user.username));
+      
       navigate('/watchlist');
     } else {
       alert("Enter valid details to login");
@@ -38,7 +51,7 @@ const Login = () => {
 
       <form className="login-form" onSubmit={handleSubmit}>
         <div className="form-group">
-          <label htmlFor="email">Name:</label>
+          <label htmlFor="email">Username:</label>
           <input
             type="name"
             id="name"

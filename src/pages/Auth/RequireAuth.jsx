@@ -1,18 +1,23 @@
-// Import necessary libraries and components
-import { useAuth } from "./Auth"; // Import the custom authentication hook
+import React, { useEffect, useState } from "react";
+import { useAuth } from "./Auth";
 import { Navigate } from "react-router-dom";
 
-// Create a component named RequireAuth to protect routes that require authentication
-
 export const RequireAuth = ({ children }) => {
-  // Access the authentication context using the useAuth hook
   const auth = useAuth();
-  const user = localStorage.getItem("username")
+  // const user = localStorage.getItem("username");
+  const [localData, setLocalData] = useState(JSON.parse(localStorage.getItem("Users")) || []);
 
+  
 
-  // Check if the user is authenticated
-  if (!user) {
-    // If not authenticated, redirect to the login page 
+  const authenticatedUser = localData.find((userData) => {
+    if(userData.login_status === "login") {
+      return "login"
+    }
+    
+  });
+  console.log("AUTH", authenticatedUser);
+
+  if (!authenticatedUser) {
     return <Navigate to="/" />;
   }
 

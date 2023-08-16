@@ -1,45 +1,48 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 import "./Header.css";
-import { useAuth } from "../../pages/Auth/Auth";
 import { NavLink } from "react-router-dom";
+
 function Header() {
-  const user = JSON.parse(localStorage.getItem("username"));
-
+  const localData = JSON.parse(localStorage.getItem("Users"));
   const navigate = useNavigate();
-  const auth = useAuth();
 
-  const hanldeLogout = () => {
-    auth.logout();
-    localStorage.removeItem("username");
-    alert("Do you want to Logout");
-    navigate("/"); // Call the logout function from the authentication context
+  const handleLogout = () => {
+    // Find the user's data and update the login_status to an empty string
+    const updatedLocalData = localData.map((userData) =>
+      userData.login_status === "login"
+        ? { ...userData, login_status: "" }
+        : userData
+    );
+
+    // Save the updated data back to localStorage
+    localStorage.setItem("Users", JSON.stringify(updatedLocalData));
+
+    // Navigate to the login page after logout
+    navigate("/");
   };
+
+  // Find the user's data from localData whose login_status is "login"
+  const currentUserData = localData.find((userData) => userData.login_status === "login");
 
   return (
     <div className="header-list">
       <div className="nav-username">
-        <NavLink
-          style={{ textDecoration: "none", color: "white" }}
-          to={"/watchlist"}
-        >
+        <NavLink style={{ textDecoration: "none", color: "white" }} to={"/watchlist"}>
           Watchlist
         </NavLink>
         <div className="orders-nav">
-        <NavLink
-          style={{ textDecoration: "none", color: "white" }}
-          to={"/orders"}
-        >
-          Orders
-        </NavLink>
+          <NavLink style={{ textDecoration: "none", color: "white" }} to={"/orders"}>
+            Orders
+          </NavLink>
         </div>
       </div>
 
-      {/* Conditionally display the admin username */}
-      <div>{user}</div>
+      {/* Display the username if user data is found */}
+      <div>{currentUserData ? currentUserData.username : ""}</div>
 
       <NavLink
-        onClick={hanldeLogout} // Attach a click event to trigger logout
+        onClick={handleLogout}
         style={{ textDecoration: "none", color: "white" }}
         className="log-out"
         to={"/"}
@@ -49,4 +52,5 @@ function Header() {
     </div>
   );
 }
+
 export default Header;

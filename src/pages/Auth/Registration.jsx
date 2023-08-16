@@ -10,12 +10,13 @@ const Registration = () => {
     password: "",
     mobileNumber: "",
     dateOfBirth: "",
+    login_status : "",
   });
 
   const [localData, setLocalData] = useState([]);
 
   useEffect(() => {
-    const storedData = localStorage.getItem("RegistrationUserData");
+    const storedData = localStorage.getItem("Users");
     if (storedData) {
       const parsedData = JSON.parse(storedData);
       if (Array.isArray(parsedData)) {
@@ -24,7 +25,7 @@ const Registration = () => {
     }
   }, []);
 
-  const { email, username, password, mobileNumber, dateOfBirth } = data;
+  const { email, username, password, mobileNumber, dateOfBirth, login_status  } = data;
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -66,6 +67,7 @@ const Registration = () => {
       password,
       mobileNumber,
       dateOfBirth,
+      login_status ,
     };
 
     const existingUser = localData.find((item) => item.username === username);
@@ -75,7 +77,7 @@ const Registration = () => {
     }
 
     const updatedData = [...localData, newFormData];
-    localStorage.setItem("RegistrationUserData", JSON.stringify(updatedData));
+    localStorage.setItem("Users", JSON.stringify(updatedData));
     setLocalData(updatedData);
     setData({
       email: "",
@@ -116,7 +118,7 @@ const Registration = () => {
         <h2>Register </h2>
 
         <div className="form-group">
-          <label>Name:</label>
+          <label>Username:</label>
           <input
             type="text"
             name="username"
