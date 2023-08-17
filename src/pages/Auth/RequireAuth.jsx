@@ -15,7 +15,7 @@ export const RequireAuth = ({ children }) => {
     }
     
   });
-  console.log("AUTH", authenticatedUser);
+  
 
   if (!authenticatedUser) {
     return <Navigate to="/" />;

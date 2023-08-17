@@ -11,6 +11,7 @@ const Registration = () => {
     mobileNumber: "",
     dateOfBirth: "",
     login_status : "",
+    orders : [],
   });
 
   const [localData, setLocalData] = useState([]);
@@ -25,7 +26,7 @@ const Registration = () => {
     }
   }, []);
 
-  const { email, username, password, mobileNumber, dateOfBirth, login_status  } = data;
+  const { email, username, password, mobileNumber, dateOfBirth, login_status, orders  } = data;
 
   const changeHandler = (e) => {
     const { name, value } = e.target;
@@ -68,6 +69,7 @@ const Registration = () => {
       mobileNumber,
       dateOfBirth,
       login_status ,
+      orders,
     };
 
     const existingUser = localData.find((item) => item.username === username);
@@ -85,6 +87,7 @@ const Registration = () => {
       password: "",
       mobileNumber: "",
       dateOfBirth: "",
+      orders : [],
     });
 
     console.log(data);

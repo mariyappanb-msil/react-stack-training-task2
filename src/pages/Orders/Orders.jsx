@@ -3,7 +3,10 @@ import Header from "../../components/Header/Header";
 import './Orders.css'
 
 function Orders() {
-  const orders = JSON.parse(localStorage.getItem("Orders")) || [];
+  const localData = JSON.parse(localStorage.getItem("Users")) || [];
+  const loggedInUserIndex = localData.findIndex(user => user.login_status === "login");
+  console.log(localData,"localData")
+  const orders = localData[loggedInUserIndex].orders
 
   return (
     <>

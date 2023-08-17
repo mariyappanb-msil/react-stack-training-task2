@@ -9,8 +9,14 @@ function Buy() {
   const navigate = useNavigate();
   const { stock } = location.state || {};
 
-  const [quantity, setQuantity] = useState(1); // Default quantity is set to 1
+  const [quantity, setQuantity] = useState(1); 
   const totalPrice = stock.price * quantity;
+
+  if(!stock)
+  {
+    alert("No Stock Selected for Buy")
+    return <div>No Stock Selected for Buy</div>
+  }
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -22,31 +28,42 @@ function Buy() {
 
   const handleBuyClick = () => {
     if (quantity <= stock.quantity) {
-      const existingOrders = JSON.parse(localStorage.getItem("Orders")) || [];
-      const existingOrder = existingOrders.find((order) => order.stockName === stock.name);
+      const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
+   
 
-      if (existingOrder) {
-        existingOrder.quantity += quantity;
-        existingOrder.amount += totalPrice;
-      } else {
-        const order = {
-          stockName: stock.name,
-          price: stock.price,
-          quantity,
-          amount: totalPrice,
-        };
-        existingOrders.push(order);
+      // Find the logged-in user
+      const loggedInUserIndex = existingUsers.findIndex(user => user.login_status === "login");
+
+      if (loggedInUserIndex !== -1) {
+        const loggedInUser = existingUsers[loggedInUserIndex];
+        const existingOrderIndex = loggedInUser.orders.findIndex(order => order.stockName === stock.name);
+
+        if (existingOrderIndex !== -1) {
+          const existingOrder = loggedInUser.orders[existingOrderIndex];
+          existingOrder.quantity += quantity;
+          existingOrder.amount += totalPrice;
+        } else {
+          const newOrder = {
+            stockName: stock.name,
+            price: stock.price,
+            quantity,
+            amount: totalPrice,
+          };
+          loggedInUser.orders.push(newOrder);
+        }
+
+        existingUsers[loggedInUserIndex] = loggedInUser;
+        localStorage.setItem("Users", JSON.stringify(existingUsers));
+
+        setQuantity(1);
+        navigate("/orders");
+        navigate("/orders", { state: { stock: {} } }); // Reset the stock prop to empty object after navigating
       }
-
-      localStorage.setItem("Orders", JSON.stringify(existingOrders));
-
-      setQuantity(1);
-      navigate("/orders");
-
-      // Reset the stock prop to empty object after navigating
-      navigate("/orders", { state: { stock: {} } });
     }
   };
+  
+  
+  
 
   return (
     <>
