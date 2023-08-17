@@ -2,8 +2,15 @@ import React from "react";
 import { useNavigate } from "react-router-dom";
 import Header from "../../components/Header/Header";
 import "./Orders.css";
+import { useLocation } from "react-router-dom";
 
 function Orders() {
+  const location = useLocation();
+  const locationState = location.state || {};
+  const sellOrder = locationState.sellOrder;
+  const quantity = locationState.quantity;
+
+  console.log("sellOrder, quantity", sellOrder, quantity);
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
   const loggedInUserIndex = localData.findIndex(
     (user) => user.login_status === "login"
@@ -13,10 +20,11 @@ function Orders() {
   const navigate = useNavigate();
 
   const handleSellClick = (stockName) => {
-    // You can navigate to the "/sell" page with the stock name as a parameter
+
     navigate("/sell", { state: { stockName } });
   };
 
+  
   return (
     <>
       <Header />
@@ -35,23 +43,32 @@ function Orders() {
               </tr>
             </thead>
             <tbody>
-              {orders.map((order, index) => (
-                <tr key={index}>
-                  <td>{order.stockName}</td>
-                  <td>${order.price.toFixed(2)}</td>
-                  <td>{order.quantity}</td>
-                  <td>${order.amount.toFixed(2)}</td>
-                  <td>Bought</td>
-                  <td>
-                    <button
-                      className="buy-button"
-                      onClick={() => handleSellClick(order.stockName)}
-                    >
-                      Sell now
-                    </button>
-                  </td>
-                </tr>
-              ))}
+              {orders &&
+                orders.map(
+                  (order, index) =>
+                    // Conditional rendering to check if order is not null
+                    order && (
+                      <tr key={index}>
+                        <td>{order.stockName}</td>
+                        <td>${order.price.toFixed(2)}</td>
+                        <td>{order.quantity}</td>
+                        {order.amount !== null ? ( // Check if order.amount is not null
+                          <td>${order.amount.toFixed(2)}</td>
+                        ) : (
+                          <td>N/A</td> // Or any other appropriate value
+                        )}
+                        <td>Bought</td>
+                        <td>
+                          <button
+                            className="buy-button"
+                            onClick={() => handleSellClick(order.stockName)}
+                          >
+                            Sell now
+                          </button>
+                        </td>
+                      </tr>
+                    )
+                )}
             </tbody>
           </table>
         ) : (

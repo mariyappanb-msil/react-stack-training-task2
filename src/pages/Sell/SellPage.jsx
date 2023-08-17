@@ -9,31 +9,27 @@ function Buy() {
   const navigate = useNavigate();
   const { stockName } = location.state || {};
   const { order } = location.state || {};
-  console.log(stockName,"stockName")
-
+  console.log(stockName, "stockName");
 
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
   const loggedInUserIndex = localData.findIndex(
     (user) => user.login_status === "login"
   );
   const orders = localData[loggedInUserIndex].orders;
-  const matchedOrder = orders.find(order => order.stockName === stockName);
+  const matchedOrder = orders.find((order) => order.stockName === stockName);
 
   // Use the matchedOrder to set initial state
   const [sellOrder, setSellOrder] = useState(matchedOrder || null);
-  console.log("object",sellOrder)
+  console.log(sellOrder,"sellOrder")
   
- 
 
-  const [quantity, setQuantity] = useState(1); 
-  
+  const [quantity, setQuantity] = useState(1);
+
   const totalPrice = sellOrder ? sellOrder.price * quantity : 0;
   if (!sellOrder) {
     // Handle case where stock is undefined
     return <div>No stocks to Sell</div>;
   }
-
-  
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -43,11 +39,51 @@ function Buy() {
     }
   };
 
-  const handleBuyClick = () => {
+  // const handleBuyClick = (sellOrder, quantity) => {
+  //   navigate("/orders", { state: { sellOrder, quantity } });
+  // };
 
+  const handleSellClick = (stockName) => {
+    // Update the localData by finding the user's orders and modifying the corresponding order
+    const updatedLocalData = localData.map((user) => 
+    {
+      if (user.login_status === "login") 
+      {
+        const updatedOrders = user.orders.map((order) => 
+        {
+          if (order.stockName === stockName)
+           {
+            const updatedQuantity = order.quantity - quantity;
+            const updatedAmount = order.price * updatedQuantity;
+            return {
+              ...order,
+              quantity: updatedQuantity,
+              amount: updatedAmount,
+            };
+          }
+          return order;
+        }).filter((order) => 
+        {
+          // Remove the order if both quantity and amount are 0
+          return order.quantity !== 0 || order.amount !== 0;
+        });
+  
+        return {
+          ...user,
+          orders: updatedOrders,
+        };
+      }
+      return user;
+    });
+  
+    // Update the local storage
+    localStorage.setItem("Users", JSON.stringify(updatedLocalData));
+  
+    // Navigate to the "/sell" page
+    
+    navigate("/orders");
+    alert("Successfully sold")
   };
-  
-  
   
 
   return (
@@ -90,7 +126,10 @@ function Buy() {
                 <div className="total-amount">
                   Total Amount: ${totalPrice.toFixed(2)}
                 </div>
-                <button className="buy-button" onClick={handleBuyClick}>
+                <button
+                  className="buy-button"
+                  onClick={() => handleSellClick(sellOrder.stockName)}
+                >
                   Sell
                 </button>
               </div>
