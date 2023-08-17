@@ -12,8 +12,11 @@ function Watchlist() {
     navigate("/buy", { state: { stock } }); // Pass stock details as state
   };
 
-  const handleSellClick = () => {
-    navigate("/sell");
+  const handleSellClick = (stockName) => {
+    console.log("WWW",stockName)
+   
+  
+    navigate("/sell", {state: {stockName}});
   };
 
   return (
@@ -32,7 +35,7 @@ function Watchlist() {
             <button className="buybtn" onClick={() => handleBuyClick(stock)}>
               Buy
             </button>
-            <button className="sellbtn" onClick={handleSellClick}>
+            <button className="sellbtn" onClick={() => handleSellClick(stock.name)}>
               Sell
             </button>
           </div>

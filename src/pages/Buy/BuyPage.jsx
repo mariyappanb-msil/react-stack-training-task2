@@ -10,6 +10,7 @@ function Buy() {
   const { stock } = location.state || {};
 
   const [quantity, setQuantity] = useState(1); 
+  
   const totalPrice = stock.price * quantity;
 
   if(!stock)
