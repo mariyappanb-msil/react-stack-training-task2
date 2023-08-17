@@ -9,20 +9,31 @@ function Buy() {
   const navigate = useNavigate();
   const { stock } = location.state || {};
 
-  const [quantity, setQuantity] = useState(1); 
-  
+  const stockName = stock.name;
+  const stockQuantity = stock.quantity;
+
+  const [quantity, setQuantity] = useState(1);
+
+  const localData = JSON.parse(localStorage.getItem("Users")) || [];
+  const loggedInUserIndex = localData.findIndex(
+    (user) => user.login_status === "login"
+  );
+  const orders = localData[loggedInUserIndex].orders;
+
+  const order = orders.find((order) => order.stockName === stockName);
+  const remainingQuantities = order &&  stockQuantity - order.quantity;
+
   const totalPrice = stock.price * quantity;
 
-  if(!stock)
-  {
-    alert("No Stock Selected for Buy")
-    return <div>No Stock Selected for Buy</div>
+  if (!stock) {
+    alert("No Stock Selected for Buy");
+    return <div>No Stock Selected for Buy</div>;
   }
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
 
-    if (newQuantity >= 1 && newQuantity <= stock.quantity) {
+    if (newQuantity >= 1 && newQuantity <= remainingQuantities) {
       setQuantity(newQuantity);
     }
   };
@@ -30,14 +41,17 @@ function Buy() {
   const handleBuyClick = () => {
     if (quantity <= stock.quantity) {
       const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
-   
 
       // Find the logged-in user
-      const loggedInUserIndex = existingUsers.findIndex(user => user.login_status === "login");
+      const loggedInUserIndex = existingUsers.findIndex(
+        (user) => user.login_status === "login"
+      );
 
       if (loggedInUserIndex !== -1) {
         const loggedInUser = existingUsers[loggedInUserIndex];
-        const existingOrderIndex = loggedInUser.orders.findIndex(order => order.stockName === stock.name);
+        const existingOrderIndex = loggedInUser.orders.findIndex(
+          (order) => order.stockName === stock.name
+        );
 
         if (existingOrderIndex !== -1) {
           const existingOrder = loggedInUser.orders[existingOrderIndex];
@@ -62,9 +76,6 @@ function Buy() {
       }
     }
   };
-  
-  
-  
 
   return (
     <>
@@ -84,7 +95,7 @@ function Buy() {
               <tbody>
                 <tr>
                   <td>{stock.name}</td>
-                  <td>{stock.quantity}</td>
+                  <td>{remainingQuantities ? remainingQuantities : stock.quantity  }</td>
                   <td>${stock.price.toFixed(2)}</td>
                   <td>
                     <input
