@@ -21,7 +21,8 @@ function Buy() {
   const orders = localData[loggedInUserIndex].orders;
 
   const order = orders.find((order) => order.stockName === stockName);
-  const remainingQuantities = order &&  stockQuantity - order.quantity;
+  const orderedQuantity = order ? order.quantity : 0;
+  const remainingQuantities = stockQuantity - orderedQuantity;
 
   const totalPrice = stock.price * quantity;
 
@@ -35,6 +36,8 @@ function Buy() {
 
     if (newQuantity >= 1 && newQuantity <= remainingQuantities) {
       setQuantity(newQuantity);
+    } else if (newQuantity > remainingQuantities) {
+      setQuantity(remainingQuantities); // Set to maximum available quantity
     }
   };
 
@@ -95,7 +98,7 @@ function Buy() {
               <tbody>
                 <tr>
                   <td>{stock.name}</td>
-                  <td>{remainingQuantities ? remainingQuantities : stock.quantity  }</td>
+                  <td>{remainingQuantities ? remainingQuantities : stock.quantity}</td>
                   <td>${stock.price.toFixed(2)}</td>
                   <td>
                     <input
@@ -103,7 +106,7 @@ function Buy() {
                       value={quantity}
                       onChange={handleQuantityChange}
                       min="1"
-                      max={stock.quantity}
+                      max={remainingQuantities}
                     />
                   </td>
                 </tr>
