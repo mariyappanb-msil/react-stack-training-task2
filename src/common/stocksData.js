@@ -1,4 +1,6 @@
-var inventoryData = [
+import React from "react";
+
+const inventoryData = [
   {
     name: "Apple",
     price: 300,
@@ -30,8 +32,23 @@ var inventoryData = [
     quantity: 8,
   },
 ];
-var inventoryDataString = JSON.stringify(inventoryData);
 
-localStorage.setItem("inventory", inventoryDataString);
+const StocksData = () => {
+  const inventoryDataString = JSON.stringify(inventoryData);
 
-export default inventoryData;
+  // Check if the key 'inventory' already exists in localStorage before setting it
+  if (!localStorage.getItem('inventory')) {
+    localStorage.setItem("inventory", inventoryDataString);
+    console.log("Inventory data saved to localStorage.");
+  } else {
+    console.log("Inventory data already exists in localStorage.");
+  }
+
+  return (
+    <div>
+      {/* Your component JSX */}
+    </div>
+  );
+};
+
+export default StocksData;

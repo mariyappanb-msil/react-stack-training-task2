@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import "./watchlist.css";
 import Header from "../../components/Header/Header";
+import StocksData from "../../common/stocksData";
 
 
 function Watchlist() {
@@ -11,6 +12,7 @@ function Watchlist() {
     (user) => user.login_status === "login"
   );
   const orders = localData[loggedInUserIndex].orders;
+
 
   const [stocks, setStocks] = useState([]);
   const [remainingQuantities, setRemainingQuantities] = useState([]);
@@ -41,7 +43,10 @@ function Watchlist() {
 
   return (
     <div>
+      
       <Header />
+      <StocksData />
+      
 
       <h2 className="heading">Stock Watchlist</h2>
       {stocks.map((stock, index) => (
