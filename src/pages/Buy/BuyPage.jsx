@@ -13,6 +13,7 @@ function Buy() {
   const stockQuantity = stock.quantity;
 
   const [quantity, setQuantity] = useState(1);
+  const [confirming, setConfirming] = useState(false); // State to track confirmation status
 
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
   const loggedInUserIndex = localData.findIndex(
@@ -42,41 +43,45 @@ function Buy() {
   };
 
   const handleBuyClick = () => {
-    if (quantity <= stock.quantity) {
-      const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
-
-      // Find the logged-in user
-      const loggedInUserIndex = existingUsers.findIndex(
-        (user) => user.login_status === "login"
-      );
-
-      if (loggedInUserIndex !== -1) {
-        const loggedInUser = existingUsers[loggedInUserIndex];
-        const existingOrderIndex = loggedInUser.orders.findIndex(
-          (order) => order.stockName === stock.name
+    if (confirming) {
+      if (quantity <= stock.quantity) {
+        const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
+        const loggedInUserIndex = existingUsers.findIndex(
+          (user) => user.login_status === "login"
         );
 
-        if (existingOrderIndex !== -1) {
-          const existingOrder = loggedInUser.orders[existingOrderIndex];
-          existingOrder.quantity += quantity;
-          existingOrder.amount += totalPrice;
-        } else {
-          const newOrder = {
-            stockName: stock.name,
-            price: stock.price,
-            quantity,
-            amount: totalPrice,
-          };
-          loggedInUser.orders.push(newOrder);
+        if (loggedInUserIndex !== -1) {
+          const loggedInUser = existingUsers[loggedInUserIndex];
+          const existingOrderIndex = loggedInUser.orders.findIndex(
+            (order) => order.stockName === stock.name
+          );
+
+          if (existingOrderIndex !== -1) {
+            const existingOrder = loggedInUser.orders[existingOrderIndex];
+            existingOrder.quantity += quantity;
+            existingOrder.amount += totalPrice;
+          } else {
+            const newOrder = {
+              stockName: stock.name,
+              price: stock.price,
+              quantity,
+              amount: totalPrice,
+            };
+            loggedInUser.orders.push(newOrder);
+          }
+
+          existingUsers[loggedInUserIndex] = loggedInUser;
+          localStorage.setItem("Users", JSON.stringify(existingUsers));
+
+          setQuantity(1);
+          setConfirming(false); // Reset confirmation status
+          navigate("/orders");
+          navigate("/orders", { state: { stock: {} } }); // Reset the stock prop to empty object after navigating
         }
-
-        existingUsers[loggedInUserIndex] = loggedInUser;
-        localStorage.setItem("Users", JSON.stringify(existingUsers));
-
-        setQuantity(1);
-        navigate("/orders");
-        navigate("/orders", { state: { stock: {} } }); // Reset the stock prop to empty object after navigating
       }
+    } else {
+      // If not confirming, set confirming to true
+      setConfirming(true);
     }
   };
 
@@ -98,7 +103,9 @@ function Buy() {
               <tbody>
                 <tr>
                   <td>{stock.name}</td>
-                  <td>{remainingQuantities ? remainingQuantities : stock.quantity}</td>
+                  <td>
+                    {remainingQuantities ? remainingQuantities : stock.quantity}
+                  </td>
                   <td>${stock.price.toFixed(2)}</td>
                   <td>
                     <input
@@ -121,7 +128,7 @@ function Buy() {
                   Total Amount: ${totalPrice.toFixed(2)}
                 </div>
                 <button className="buy-button" onClick={handleBuyClick}>
-                  Buy
+                  {confirming ? "Confirm to Buy" : "Buy"}
                 </button>
               </div>
             )}

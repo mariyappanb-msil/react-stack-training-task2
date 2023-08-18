@@ -20,10 +20,10 @@ function Buy() {
 
   // Use the matchedOrder to set initial state
   const [sellOrder, setSellOrder] = useState(matchedOrder || null);
-  console.log(sellOrder,"sellOrder")
-  
+  console.log(sellOrder, "sellOrder");
 
   const [quantity, setQuantity] = useState(1);
+  const [confirming, setConfirming] = useState(false); // State to track confirmation status
 
   const totalPrice = sellOrder ? sellOrder.price * quantity : 0;
   if (!sellOrder) {
@@ -39,52 +39,47 @@ function Buy() {
     }
   };
 
-  // const handleBuyClick = (sellOrder, quantity) => {
-  //   navigate("/orders", { state: { sellOrder, quantity } });
-  // };
+  const handleSellClick = () => {
+    if (confirming) {
+      // Update the localData by finding the user's orders and modifying the corresponding order
+      const updatedLocalData = localData.map((user) => {
+        if (user.login_status === "login") {
+          const updatedOrders = user.orders.map((order) => {
+            if (order.stockName === stockName) {
+              const updatedQuantity = order.quantity - quantity;
+              const updatedAmount = order.price * updatedQuantity;
+              return {
+                ...order,
+                quantity: updatedQuantity,
+                amount: updatedAmount,
+              };
+            }
+            return order;
+          }).filter((order) => {
+            // Remove the order if both quantity and amount are 0
+            return order.quantity !== 0 || order.amount !== 0;
+          });
 
-  const handleSellClick = (stockName) => {
-    // Update the localData by finding the user's orders and modifying the corresponding order
-    const updatedLocalData = localData.map((user) => 
-    {
-      if (user.login_status === "login") 
-      {
-        const updatedOrders = user.orders.map((order) => 
-        {
-          if (order.stockName === stockName)
-           {
-            const updatedQuantity = order.quantity - quantity;
-            const updatedAmount = order.price * updatedQuantity;
-            return {
-              ...order,
-              quantity: updatedQuantity,
-              amount: updatedAmount,
-            };
-          }
-          return order;
-        }).filter((order) => 
-        {
-          // Remove the order if both quantity and amount are 0
-          return order.quantity !== 0 || order.amount !== 0;
-        });
-  
-        return {
-          ...user,
-          orders: updatedOrders,
-        };
-      }
-      return user;
-    });
-  
-    // Update the local storage
-    localStorage.setItem("Users", JSON.stringify(updatedLocalData));
-  
-    // Navigate to the "/sell" page
-    
-    navigate("/orders");
-    alert("Successfully sold")
+          return {
+            ...user,
+            orders: updatedOrders,
+          };
+        }
+        return user;
+      });
+
+      // Update the local storage
+      localStorage.setItem("Users", JSON.stringify(updatedLocalData));
+
+      setQuantity(1);
+      setConfirming(false); // Reset confirmation status
+      navigate("/orders");
+      alert("Successfully sold");
+    } else {
+      // If not confirming, set confirming to true
+      setConfirming(true);
+    }
   };
-  
 
   return (
     <>
@@ -128,9 +123,9 @@ function Buy() {
                 </div>
                 <button
                   className="buy-button"
-                  onClick={() => handleSellClick(sellOrder.stockName)}
+                  onClick={handleSellClick}
                 >
-                  Sell
+                  {confirming ? "Confirm to Sell" : "Sell"}
                 </button>
               </div>
             )}
