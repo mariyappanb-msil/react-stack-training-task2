@@ -21,7 +21,7 @@ function Watchlist() {
   
 
   const handleBuyClick = (stock) => {
-    navigate("/buy", { state: { stock } }); // Pass stock details as state
+    navigate("/buy", { state: { stock } }); 
   };
 
   const handleSellClick = (stockName) => {

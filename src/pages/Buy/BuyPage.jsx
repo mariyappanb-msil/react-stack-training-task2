@@ -9,11 +9,11 @@ function Buy() {
   const navigate = useNavigate();
   const { stock } = location.state || {};
 
-  const stockName = stock.name;
-  const stockQuantity = stock.quantity;
+  const stockName = stock && stock.name;
+  const stockQuantity =stock && stock.quantity;
 
   const [quantity, setQuantity] = useState(1);
-  const [confirming, setConfirming] = useState(false); // State to track confirmation status
+  const [confirming, setConfirming] = useState(false); 
 
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
   const loggedInUserIndex = localData.findIndex(
@@ -25,10 +25,10 @@ function Buy() {
   const orderedQuantity = order ? order.quantity : 0;
   const remainingQuantities = stockQuantity - orderedQuantity;
 
-  const totalPrice = stock.price * quantity;
+  const totalPrice = stock && stock.price * quantity;
 
   if (!stock) {
-    alert("No Stock Selected for Buy");
+    
     return <div>No Stock Selected for Buy</div>;
   }
 
@@ -38,9 +38,11 @@ function Buy() {
     if (newQuantity >= 1 && newQuantity <= remainingQuantities) {
       setQuantity(newQuantity);
     } else if (newQuantity > remainingQuantities) {
-      setQuantity(remainingQuantities); // Set to maximum available quantity
+      setQuantity(remainingQuantities); 
     }
   };
+
+  //function to set data in local storage at particular object based on login_status === "login" 
 
   const handleBuyClick = () => {
     if (confirming) {
@@ -55,7 +57,7 @@ function Buy() {
           const existingOrderIndex = loggedInUser.orders.findIndex(
             (order) => order.stockName === stock.name
           );
-
+          // If same exists updating only quantity of that stock
           if (existingOrderIndex !== -1) {
             const existingOrder = loggedInUser.orders[existingOrderIndex];
             existingOrder.quantity += quantity;
@@ -74,13 +76,13 @@ function Buy() {
           localStorage.setItem("Users", JSON.stringify(existingUsers));
 
           setQuantity(1);
-          setConfirming(false); // Reset confirmation status
+          setConfirming(false); 
           navigate("/orders");
-          navigate("/orders", { state: { stock: {} } }); // Reset the stock prop to empty object after navigating
+          navigate("/orders", { state: { stock: {} } }); 
         }
       }
     } else {
-      // If not confirming, set confirming to true
+      
       setConfirming(true);
     }
   };

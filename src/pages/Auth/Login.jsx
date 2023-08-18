@@ -2,34 +2,26 @@ import React, { useState } from "react";
 import "./Login.css";
 import { useNavigate } from "react-router-dom";
 
-
 const Login = () => {
   const [name, setName] = useState("");
   const [password, setPassword] = useState("");
-  const [loginData, setLoginData] = useState("")
+  const [loginData, setLoginData] = useState("");
   const navigate = useNavigate();
-
 
   const handleSubmit = (e) => {
     e.preventDefault();
-   
+
     const storedData = JSON.parse(localStorage.getItem("Users")) || [];
     console.log(storedData, "existingData");
 
-
-
-  
     const user = storedData.find((data) => {
       return data.username === name && data.password === password;
     });
-  
 
-    
-    
     if (user) {
       alert("Welcome" + " " + name);
 
-      const updatedData = storedData.map(data => {
+      const updatedData = storedData.map((data) => {
         if (data.username === name && data.password === password) {
           return { ...data, login_status: "login" };
         }
@@ -37,9 +29,9 @@ const Login = () => {
       });
 
       localStorage.setItem("Users", JSON.stringify(updatedData));
-      // localStorage.setItem("username", JSON.stringify(user.username));
-      
-      navigate('/watchlist');
+     
+
+      navigate("/watchlist");
     } else {
       alert("Enter valid details to login");
     }
@@ -71,10 +63,14 @@ const Login = () => {
           />
         </div>
         <button type="submit">Login</button>
-        <a className="accountmessage">Don't have an account?</a>  <p  className="regester-button" onClick={() => navigate("/regestration")}>Regester</p>
+        <a className="accountmessage">Don't have an account?</a>{" "}
+        <p
+          className="regester-button"
+          onClick={() => navigate("/regestration")}
+        >
+          Regester
+        </p>
       </form>
-       
-
     </div>
   );
 };

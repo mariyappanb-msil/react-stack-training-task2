@@ -8,7 +8,7 @@ function Header() {
   const navigate = useNavigate();
 
   const handleLogout = () => {
-    // Find the user's data and update the login_status to an empty string
+    // Find the user's data and set login_status to an empty string
     const updatedLocalData = localData.map((userData) =>
       userData.login_status === "login"
         ? { ...userData, login_status: "" }
@@ -18,27 +18,33 @@ function Header() {
     // Save the updated data back to localStorage
     localStorage.setItem("Users", JSON.stringify(updatedLocalData));
 
-    // Navigate to the login page after logout
+   
     navigate("/");
   };
 
   // Find the user's data from localData whose login_status is "login"
-  const currentUserData = localData.find((userData) => userData.login_status === "login");
+  const currentUserData = localData.find(
+    (userData) => userData.login_status === "login"
+  );
 
   return (
     <div className="header-list">
       <div className="nav-username">
-        <NavLink style={{ textDecoration: "none", color: "white" }} to={"/watchlist"}>
+        <NavLink
+          style={{ textDecoration: "none", color: "white" }}
+          to={"/watchlist"}
+        >
           Watchlist
         </NavLink>
         <div className="orders-nav">
-          <NavLink style={{ textDecoration: "none", color: "white" }} to={"/orders"}>
+          <NavLink
+            style={{ textDecoration: "none", color: "white" }}
+            to={"/orders"}
+          >
             Orders
           </NavLink>
         </div>
       </div>
-
-      {/* Display the username if user data is found */}
       <div>{currentUserData ? currentUserData.username : ""}</div>
 
       <NavLink

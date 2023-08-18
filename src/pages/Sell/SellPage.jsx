@@ -18,16 +18,16 @@ function Buy() {
   const orders = localData[loggedInUserIndex].orders;
   const matchedOrder = orders.find((order) => order.stockName === stockName);
 
-  // Use the matchedOrder to set initial state
+  
   const [sellOrder, setSellOrder] = useState(matchedOrder || null);
   console.log(sellOrder, "sellOrder");
 
   const [quantity, setQuantity] = useState(1);
-  const [confirming, setConfirming] = useState(false); // State to track confirmation status
+  const [confirming, setConfirming] = useState(false); 
 
   const totalPrice = sellOrder ? sellOrder.price * quantity : 0;
   if (!sellOrder) {
-    // Handle case where stock is undefined
+    
     return <div>No stocks to Sell</div>;
   }
 
@@ -39,13 +39,20 @@ function Buy() {
     }
   };
 
+  //function to set  update the quantity in local storage after user clicks on Sell button
+
   const handleSellClick = () => {
-    if (confirming) {
-      // Update the localData by finding the user's orders and modifying the corresponding order
-      const updatedLocalData = localData.map((user) => {
-        if (user.login_status === "login") {
-          const updatedOrders = user.orders.map((order) => {
-            if (order.stockName === stockName) {
+    if (confirming) 
+    {
+      
+      const updatedLocalData = localData.map((user) => 
+      {
+        if (user.login_status === "login") 
+        {
+          const updatedOrders = user.orders.map((order) => 
+          {
+            if (order.stockName === stockName) 
+            {
               const updatedQuantity = order.quantity - quantity;
               const updatedAmount = order.price * updatedQuantity;
               return {
@@ -55,8 +62,9 @@ function Buy() {
               };
             }
             return order;
-          }).filter((order) => {
-            // Remove the order if both quantity and amount are 0
+          }).filter((order) =>
+           {
+            
             return order.quantity !== 0 || order.amount !== 0;
           });
 
@@ -68,15 +76,17 @@ function Buy() {
         return user;
       });
 
-      // Update the local storage
+      
       localStorage.setItem("Users", JSON.stringify(updatedLocalData));
 
       setQuantity(1);
-      setConfirming(false); // Reset confirmation status
+      setConfirming(false); 
       navigate("/orders");
       alert("Successfully sold");
-    } else {
-      // If not confirming, set confirming to true
+    } 
+    else 
+    {
+      
       setConfirming(true);
     }
   };

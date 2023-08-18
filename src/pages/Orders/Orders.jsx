@@ -46,16 +46,16 @@ function Orders() {
               {orders &&
                 orders.map(
                   (order, index) =>
-                    // Conditional rendering to check if order is not null
+                    
                     order && (
                       <tr key={index}>
                         <td>{order.stockName}</td>
                         <td>${order.price.toFixed(2)}</td>
                         <td>{order.quantity}</td>
-                        {order.amount !== null ? ( // Check if order.amount is not null
+                        {order.amount !== null ? ( 
                           <td>${order.amount.toFixed(2)}</td>
                         ) : (
-                          <td>N/A</td> // Or any other appropriate value
+                          <td>N/A</td> 
                         )}
                         <td>Bought</td>
                         <td>

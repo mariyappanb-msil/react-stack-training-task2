@@ -9,8 +9,6 @@ import SellPage from './pages/Sell/SellPage.jsx'
 import { AuthProvider } from "./pages/Auth/Auth";
 import { RequireAuth } from "./pages/Auth/RequireAuth";
 
-
-
 function App() {
   return (
     <AuthProvider>
@@ -22,14 +20,9 @@ function App() {
         <Route path="/buy" element={<RequireAuth><BuyPage /></RequireAuth>} />
         <Route path="/sell" element={<RequireAuth><SellPage /></RequireAuth>} />
         <Route path="/orders" element={<RequireAuth><Orders /></RequireAuth>} />
-     
-        
-        
-
       </Routes>
     </Router>
     </AuthProvider>
   );
 }
-
 export default App;
