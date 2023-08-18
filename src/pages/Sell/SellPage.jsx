@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../../components/Header/Header";
-
 import { useNavigate } from "react-router-dom";
+import './Sell.css';
 
-function Buy() {
+function Sell() {
   const location = useLocation();
   const navigate = useNavigate();
   const { stockName } = location.state || {};
@@ -18,16 +18,15 @@ function Buy() {
   const orders = localData[loggedInUserIndex].orders;
   const matchedOrder = orders.find((order) => order.stockName === stockName);
 
-  
+  // Use the matchedOrder to set initial state
   const [sellOrder, setSellOrder] = useState(matchedOrder || null);
   console.log(sellOrder, "sellOrder");
 
   const [quantity, setQuantity] = useState(1);
-  const [confirming, setConfirming] = useState(false); 
 
   const totalPrice = sellOrder ? sellOrder.price * quantity : 0;
   if (!sellOrder) {
-    
+    // Handle case where stock is undefined
     return <div>No stocks to Sell</div>;
   }
 
@@ -39,56 +38,47 @@ function Buy() {
     }
   };
 
-  //function to set  update the quantity in local storage after user clicks on Sell button
+  const handleSellClick = (stockName) => {
+    const updatedLocalData = localData.map((user) => {
+      if (user.login_status === "login") {
+        const updatedOrders = user.orders.map((order) => {
+          if (order.stockName === stockName) {
+            const updatedQuantity = order.quantity - quantity;
+            const updatedAmount = order.price * updatedQuantity;
+            return {
+              ...order,
+              quantity: updatedQuantity,
+              amount: updatedAmount,
+            };
+          }
+          return order;
+        }).filter((order) => {
+          // Remove the order if both quantity and amount are 0
+          return order.quantity !== 0 || order.amount !== 0;
+        });
 
-  const handleSellClick = () => {
-    if (confirming) 
-    {
-      
-      const updatedLocalData = localData.map((user) => 
-      {
-        if (user.login_status === "login") 
-        {
-          const updatedOrders = user.orders.map((order) => 
-          {
-            if (order.stockName === stockName) 
-            {
-              const updatedQuantity = order.quantity - quantity;
-              const updatedAmount = order.price * updatedQuantity;
-              return {
-                ...order,
-                quantity: updatedQuantity,
-                amount: updatedAmount,
-              };
-            }
-            return order;
-          }).filter((order) =>
-           {
-            
-            return order.quantity !== 0 || order.amount !== 0;
-          });
+        return {
+          ...user,
+          orders: updatedOrders,
+        };
+      }
+      return user;
+    });
 
-          return {
-            ...user,
-            orders: updatedOrders,
-          };
-        }
-        return user;
-      });
+    // Update the local storage
+    localStorage.setItem("Users", JSON.stringify(updatedLocalData));
 
-      
-      localStorage.setItem("Users", JSON.stringify(updatedLocalData));
+    // Update the inventory
+    const inventoryData = JSON.parse(localStorage.getItem("inventory")) || [];
+    const stockIndex = inventoryData.findIndex(item => item.name === stockName);
 
-      setQuantity(1);
-      setConfirming(false); 
-      navigate("/orders");
-      alert("Successfully sold");
-    } 
-    else 
-    {
-      
-      setConfirming(true);
+    if (stockIndex !== -1) {
+      inventoryData[stockIndex].quantity += quantity;
+      localStorage.setItem("inventory", JSON.stringify(inventoryData));
     }
+
+    navigate("/orders");
+    alert("Successfully sold");
   };
 
   return (
@@ -133,9 +123,9 @@ function Buy() {
                 </div>
                 <button
                   className="buy-button"
-                  onClick={handleSellClick}
+                  onClick={() => handleSellClick(sellOrder.stockName)}
                 >
-                  {confirming ? "Confirm to Sell" : "Sell"}
+                  Sell
                 </button>
               </div>
             )}
@@ -146,4 +136,4 @@ function Buy() {
   );
 }
 
-export default Buy;
+export default Sell;

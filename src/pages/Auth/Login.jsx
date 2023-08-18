@@ -30,6 +30,7 @@ const Login = () => {
 
       localStorage.setItem("Users", JSON.stringify(updatedData));
      
+     
 
       navigate("/watchlist");
     } else {

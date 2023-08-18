@@ -1,36 +1,29 @@
 import React, { useState } from "react";
 import { useLocation } from "react-router-dom";
 import Header from "../../components/Header/Header";
-import "./BuyPage.css";
 import { useNavigate } from "react-router-dom";
-
+import './BuyPage.css';
 function Buy() {
   const location = useLocation();
   const navigate = useNavigate();
   const { stock } = location.state || {};
 
-  const stockName = stock && stock.name;
-  const stockQuantity =stock && stock.quantity;
+  const stockName = stock.name;
+  const stockQuantity = stock.quantity;
 
   const [quantity, setQuantity] = useState(1);
-  const [confirming, setConfirming] = useState(false); 
 
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
   const loggedInUserIndex = localData.findIndex(
     (user) => user.login_status === "login"
   );
-  const orders = localData[loggedInUserIndex].orders;
+  const loggedInUser = localData[loggedInUserIndex];
 
-  const order = orders.find((order) => order.stockName === stockName);
+  const order = loggedInUser.orders.find((order) => order.stockName === stockName);
   const orderedQuantity = order ? order.quantity : 0;
   const remainingQuantities = stockQuantity - orderedQuantity;
 
-  const totalPrice = stock && stock.price * quantity;
-
-  if (!stock) {
-    
-    return <div>No Stock Selected for Buy</div>;
-  }
+  const totalPrice = stock.price * quantity;
 
   const handleQuantityChange = (event) => {
     const newQuantity = parseInt(event.target.value, 10);
@@ -38,55 +31,54 @@ function Buy() {
     if (newQuantity >= 1 && newQuantity <= remainingQuantities) {
       setQuantity(newQuantity);
     } else if (newQuantity > remainingQuantities) {
-      setQuantity(remainingQuantities); 
+      setQuantity(remainingQuantities); // Set to maximum available quantity
     }
   };
-
-  //function to set data in local storage at particular object based on login_status === "login" 
 
   const handleBuyClick = () => {
-    if (confirming) {
-      if (quantity <= stock.quantity) {
-        const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
-        const loggedInUserIndex = existingUsers.findIndex(
-          (user) => user.login_status === "login"
+    if (quantity <= remainingQuantities) {
+      const existingUsers = JSON.parse(localStorage.getItem("Users")) || [];
+
+      // Find the logged-in user
+      const existingUser = existingUsers.find(user => user.login_status === "login");
+
+      if (existingUser) {
+        const existingOrderIndex = existingUser.orders.findIndex(
+          (order) => order.stockName === stock.name
         );
 
-        if (loggedInUserIndex !== -1) {
-          const loggedInUser = existingUsers[loggedInUserIndex];
-          const existingOrderIndex = loggedInUser.orders.findIndex(
-            (order) => order.stockName === stock.name
-          );
-          // If same exists updating only quantity of that stock
-          if (existingOrderIndex !== -1) {
-            const existingOrder = loggedInUser.orders[existingOrderIndex];
-            existingOrder.quantity += quantity;
-            existingOrder.amount += totalPrice;
-          } else {
-            const newOrder = {
-              stockName: stock.name,
-              price: stock.price,
-              quantity,
-              amount: totalPrice,
-            };
-            loggedInUser.orders.push(newOrder);
-          }
-
-          existingUsers[loggedInUserIndex] = loggedInUser;
-          localStorage.setItem("Users", JSON.stringify(existingUsers));
-
-          setQuantity(1);
-          setConfirming(false); 
-          navigate("/orders");
-          navigate("/orders", { state: { stock: {} } }); 
+        if (existingOrderIndex !== -1) {
+          const existingOrder = existingUser.orders[existingOrderIndex];
+          existingOrder.quantity += quantity;
+          existingOrder.amount += totalPrice;
+        } else {
+          const newOrder = {
+            stockName: stock.name,
+            price: stock.price,
+            quantity,
+            amount: totalPrice,
+          };
+          existingUser.orders.push(newOrder);
         }
+
+        localStorage.setItem("Users", JSON.stringify(existingUsers));
+
+        // Update the inventory quantity
+        const inventoryData = JSON.parse(localStorage.getItem("inventory")) || [];
+        const stockIndex = inventoryData.findIndex(item => item.name === stock.name);
+        
+        if (stockIndex !== -1) {
+          inventoryData[stockIndex].quantity -= quantity;
+          localStorage.setItem("inventory", JSON.stringify(inventoryData));
+        }
+
+        setQuantity(1);
+        navigate("/orders");
+        navigate("/orders", { state: { stock: {} } }); // Reset the stock prop to an empty object after navigating
       }
-    } else {
-      
-      setConfirming(true);
     }
   };
-
+  
   return (
     <>
       <Header />
@@ -105,9 +97,7 @@ function Buy() {
               <tbody>
                 <tr>
                   <td>{stock.name}</td>
-                  <td>
-                    {remainingQuantities ? remainingQuantities : stock.quantity}
-                  </td>
+                  <td>{remainingQuantities}</td>
                   <td>${stock.price.toFixed(2)}</td>
                   <td>
                     <input
@@ -121,16 +111,16 @@ function Buy() {
                 </tr>
               </tbody>
             </table>
-            {quantity > stock.quantity && (
+            {quantity > remainingQuantities && (
               <div className="no-stock">No stock present</div>
             )}
-            {quantity >= 1 && quantity <= stock.quantity && (
+            {quantity >= 1 && quantity <= remainingQuantities && (
               <div className="order-summary">
                 <div className="total-amount">
                   Total Amount: ${totalPrice.toFixed(2)}
                 </div>
                 <button className="buy-button" onClick={handleBuyClick}>
-                  {confirming ? "Confirm to Buy" : "Buy"}
+                  Buy
                 </button>
               </div>
             )}
