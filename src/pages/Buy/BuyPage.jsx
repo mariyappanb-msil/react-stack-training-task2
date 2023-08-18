@@ -10,6 +10,7 @@ function Buy() {
 
   const stockName = stock.name;
   const stockQuantity = stock.quantity;
+  console.log(stockQuantity,"stockQuantity")
 
   const [quantity, setQuantity] = useState(1);
 
@@ -21,7 +22,7 @@ function Buy() {
 
   const order = loggedInUser.orders.find((order) => order.stockName === stockName);
   const orderedQuantity = order ? order.quantity : 0;
-  const remainingQuantities = stockQuantity - orderedQuantity;
+  const remainingQuantities = stockQuantity ;
 
   const totalPrice = stock.price * quantity;
 

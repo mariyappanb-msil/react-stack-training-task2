@@ -4,7 +4,6 @@ import "./watchlist.css";
 import Header from "../../components/Header/Header";
 import StocksData from "../../common/stocksData";
 
-
 function Watchlist() {
   const navigate = useNavigate();
   const localData = JSON.parse(localStorage.getItem("Users")) || [];
@@ -13,17 +12,15 @@ function Watchlist() {
   );
   const orders = localData[loggedInUserIndex].orders;
 
-
   const [stocks, setStocks] = useState([]);
   const [remainingQuantities, setRemainingQuantities] = useState([]);
 
   useEffect(() => {
     // Load stocks data from local storage
-    
     const storedStocks = JSON.parse(localStorage.getItem("inventory")) || [];
     setStocks(storedStocks);
 
-    // Calculate remaining quantities based on orders and stocks
+    // Calculate remaining quantities based on stocks and inventory
     const updatedRemainingQuantities = storedStocks.map((stock) => {
       const order = orders.find((order) => order.stockName === stock.name);
       const orderedQuantity = order ? order.quantity : 0;
@@ -43,10 +40,8 @@ function Watchlist() {
 
   return (
     <div>
-      
       <Header />
       <StocksData />
-      
 
       <h2 className="heading">Stock Watchlist</h2>
       {stocks.map((stock, index) => (
@@ -54,15 +49,13 @@ function Watchlist() {
           <div className="stock-card-details">
             <h3>{stock.name}</h3>
             <div className="stock-price">Price : ${stock.price.toFixed(2)}</div>
-
-            {/* Display the correct quantity from the inventory */}
             <div> Quantity : {stock.quantity}</div>
           </div>
           <div className="stock-card-options">
             <button
               className="buybtn"
               onClick={() => handleBuyClick(stock)}
-              disabled={remainingQuantities[index] === 0}
+              disabled={stock.quantity === 0}  
             >
               Buy
             </button>
